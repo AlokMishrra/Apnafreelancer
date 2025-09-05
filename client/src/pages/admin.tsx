@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "@/hooks/use-toast";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle, XCircle, Clock, Users, Briefcase, FileText, DollarSign, Calendar } from "lucide-react";
+import { CheckCircle, XCircle, Clock, Users, Briefcase, FileText, DollarSign, Calendar, ShieldAlert } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface PendingUser {
   id: string;
@@ -62,6 +63,57 @@ export default function AdminPage() {
   const [rejectReason, setRejectReason] = useState("");
   const [adminResponse, setAdminResponse] = useState("");
   const queryClient = useQueryClient();
+  const { user, isLoading } = useAuth();
+
+  // Check if user is admin
+  useEffect(() => {
+    if (!isLoading && (!user || !user.isAdmin)) {
+      toast({
+        title: "Access Denied",
+        description: "Admin access required to view this page.",
+        variant: "destructive",
+      });
+      // Redirect to home page after a brief delay
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    }
+  }, [user, isLoading]);
+
+  // Show loading while checking auth
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 text-center">
+            <Clock className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-500" />
+            <h2 className="text-lg font-semibold mb-2">Checking Access...</h2>
+            <p className="text-muted-foreground">Verifying admin permissions</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Show access denied if not admin
+  if (!user || !user.isAdmin) {
+    return (
+      <div className="container mx-auto px-4 py-8 flex items-center justify-center min-h-screen">
+        <Card className="w-full max-w-md">
+          <CardContent className="p-6 text-center">
+            <ShieldAlert className="h-16 w-16 mx-auto mb-4 text-red-500" />
+            <h2 className="text-xl font-semibold mb-2 text-red-600">Access Denied</h2>
+            <p className="text-muted-foreground mb-4">
+              You don't have admin permissions to access this page.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Redirecting to home page...
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   const { data: pendingUsers = [], isLoading: usersLoading } = useQuery<PendingUser[]>({
     queryKey: ['/api/admin/pending-users'],

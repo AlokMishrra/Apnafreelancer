@@ -175,8 +175,8 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-center text-2xl font-poppins">
             Welcome to ApnaFreelancer
           </DialogTitle>
@@ -185,8 +185,8 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "login" | "register")} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "login" | "register")} className="w-full flex flex-col flex-1 min-h-0">
+          <TabsList className="grid w-full grid-cols-2 flex-shrink-0">
             <TabsTrigger 
               value="login" 
               data-testid="tab-login"
@@ -205,7 +205,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="login" className="space-y-4 animate-in slide-in-from-left-2 duration-300">
+          <TabsContent value="login" className="space-y-4 animate-in slide-in-from-left-2 duration-300 overflow-y-auto flex-1">
             <Form {...loginForm}>
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <FormField
@@ -286,7 +286,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
             </div>
           </TabsContent>
 
-          <TabsContent value="register" className="space-y-4 animate-in slide-in-from-right-2 duration-300">
+          <TabsContent value="register" className="space-y-4 animate-in slide-in-from-right-2 duration-300 overflow-y-auto flex-1 pr-2">
             <Form {...registerForm}>
               <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
                 {/* Role Selection */}
