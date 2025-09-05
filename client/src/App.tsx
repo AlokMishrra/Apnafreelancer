@@ -37,6 +37,7 @@ function Router() {
           <Route path="/hire-talent" component={HireTalent} />
           <Route path="/post-job" component={PostJob} />
           <Route path="/find-work" component={FindWork} />
+          <Route path="/admin" component={AdminPage} />
         </>
       ) : (
         <>
