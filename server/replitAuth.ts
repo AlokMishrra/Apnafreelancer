@@ -74,8 +74,7 @@ export async function setupAuth(app: Express) {
   ) => {
     const user = {};
     updateUserSession(user, tokens);
-    // Skip database operations for now
-    // await upsertUser(tokens.claims());
+    await upsertUser(tokens.claims());
     verified(null, user);
   };
 

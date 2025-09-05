@@ -35,14 +35,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Category routes
   app.get('/api/categories', async (req, res) => {
     try {
-      // Mock categories data
-      const categories = [
-        { id: 1, name: "Web Development", description: "Frontend and backend development" },
-        { id: 2, name: "Mobile Development", description: "iOS and Android apps" },
-        { id: 3, name: "Design", description: "UI/UX and graphic design" },
-        { id: 4, name: "Writing", description: "Content and copywriting" },
-        { id: 5, name: "Marketing", description: "Digital marketing and SEO" }
-      ];
+      const categories = await storage.getCategories();
       res.json(categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -53,23 +46,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Service routes
   app.get('/api/services', async (req, res) => {
     try {
-      // Mock services data
-      const services = [
-        {
-          id: 1,
-          title: "Professional Website Development",
-          description: "Custom website development with modern technologies",
-          price: 500,
-          categoryId: 1,
-          freelancerId: "freelancer-1",
-          freelancer: {
-            id: "freelancer-1",
-            firstName: "John",
-            lastName: "Smith",
-            profileImageUrl: null
-          }
-        }
-      ];
+      const services = await storage.getServices();
       res.json(services);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -224,54 +201,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/freelancers/top', async (req, res) => {
     try {
-      // Mock top freelancers data
-      const topFreelancers = [
-        {
-          id: "freelancer-1",
-          firstName: "John",
-          lastName: "Smith",
-          email: "john.smith@example.com",
-          profileImageUrl: null,
-          title: "Full Stack Developer",
-          bio: "Experienced web developer with 5+ years of experience in React and Node.js",
-          hourlyRate: 75,
-          rating: 4.9,
-          totalJobs: 45,
-          skills: ["React", "Node.js", "TypeScript", "MongoDB"],
-          location: "San Francisco, CA",
-          createdAt: new Date()
-        },
-        {
-          id: "freelancer-2",
-          firstName: "Sarah",
-          lastName: "Johnson",
-          email: "sarah.johnson@example.com",
-          profileImageUrl: null,
-          title: "UI/UX Designer",
-          bio: "Creative designer specializing in modern web and mobile interfaces",
-          hourlyRate: 65,
-          rating: 4.8,
-          totalJobs: 32,
-          skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-          location: "New York, NY",
-          createdAt: new Date()
-        },
-        {
-          id: "freelancer-3",
-          firstName: "Mike",
-          lastName: "Chen",
-          email: "mike.chen@example.com",
-          profileImageUrl: null,
-          title: "Mobile Developer",
-          bio: "Expert in iOS and Android app development",
-          hourlyRate: 80,
-          rating: 4.7,
-          totalJobs: 28,
-          skills: ["Swift", "Kotlin", "React Native", "Flutter"],
-          location: "Seattle, WA",
-          createdAt: new Date()
-        }
-      ];
+      const topFreelancers = await storage.getTopFreelancers();
       res.json(topFreelancers);
     } catch (error) {
       console.error("Error fetching top freelancers:", error);
