@@ -30,7 +30,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }));
 
   // Auth routes - Supabase handles registration/login on client side
-  app.get('/api/auth/user', getCurrentSupabaseUser as any);
+  app.get('/api/auth/user', getCurrentSupabaseUser);
 
   // Category routes
   app.get('/api/categories', async (req, res) => {
@@ -68,7 +68,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/services', requireSupabaseAuth as any, async (req: SupabaseSupabaseAuthenticatedRequest, res) => {
+  app.post('/api/services', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const serviceData = insertServiceSchema.parse({
@@ -109,7 +109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/jobs', requireSupabaseAuth as any, async (req: SupabaseSupabaseAuthenticatedRequest, res) => {
+  app.post('/api/jobs', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const jobData = insertJobSchema.parse({
@@ -224,7 +224,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Proposal routes
-  app.get('/api/jobs/:id/proposals', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/jobs/:id/proposals', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const jobId = parseInt(req.params.id);
       const proposals = await storage.getProposalsForJob(jobId);
@@ -235,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/proposals', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/proposals', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const proposalData = insertProposalSchema.parse({
@@ -251,7 +251,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Message routes
-  app.get('/api/conversations', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/conversations', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const conversations = await storage.getConversations(userId);
@@ -262,7 +262,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/messages/:userId', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/messages/:userId', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const currentUserId = req.user!.id;
       const otherUserId = req.params.userId;
@@ -274,7 +274,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/messages', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/messages', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const messageData = insertMessageSchema.parse({
@@ -289,7 +289,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/messages/read/:userId', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.put('/api/messages/read/:userId', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const currentUserId = req.user!.id;
       const otherUserId = req.params.userId;
@@ -313,7 +313,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/reviews', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/reviews', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const reviewData = insertReviewSchema.parse({
@@ -329,7 +329,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin routes
-  app.get('/api/admin/pending-users', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-users', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const users = await storage.getPendingUsers();
       res.json(users);
@@ -339,7 +339,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/admin/pending-services', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-services', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const services = await storage.getPendingServices();
       res.json(services);
@@ -349,7 +349,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/admin/pending-hire-requests', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-hire-requests', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const hireRequests = await storage.getPendingHireRequests();
       res.json(hireRequests);
@@ -359,7 +359,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/admin/pending-jobs', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-jobs', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const jobs = await storage.getPendingJobs();
       res.json(jobs);
@@ -369,7 +369,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/users/:id/approve', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/users/:id/approve', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const userId = req.params.id;
       const adminId = req.user!.id;
@@ -381,7 +381,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/users/:id/reject', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/users/:id/reject', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const userId = req.params.id;
       const adminId = req.user!.id;
@@ -393,7 +393,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/services/:id/approve', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/services/:id/approve', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const serviceId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -405,7 +405,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/services/:id/reject', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/services/:id/reject', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const serviceId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -418,7 +418,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/hire-requests/:id/approve', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/hire-requests/:id/approve', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const hireRequestId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -430,7 +430,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/jobs/:id/approve', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/jobs/:id/approve', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const jobId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -442,7 +442,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/hire-requests/:id/reject', requireSupabaseAdmin as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/admin/hire-requests/:id/reject', requireSupabaseAdmin, async (req: any, res: any) => {
     try {
       const hireRequestId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -456,7 +456,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Hire request routes
-  app.post('/api/hire-requests', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.post('/api/hire-requests', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
       const hireRequestData = insertHireRequestSchema.parse({
@@ -471,7 +471,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/hire-requests/client', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/hire-requests/client', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const clientId = req.user!.id;
       const hireRequests = await storage.getHireRequestsByClient(clientId);
@@ -482,7 +482,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/hire-requests/freelancer', requireSupabaseAuth as any, async (req: SupabaseAuthenticatedRequest, res) => {
+  app.get('/api/hire-requests/freelancer', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const freelancerId = req.user!.id;
       const hireRequests = await storage.getHireRequestsByFreelancer(freelancerId);
