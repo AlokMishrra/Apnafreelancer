@@ -18,13 +18,15 @@ export default function Navigation() {
 
   const navItems = [
     { href: "/", label: "Home" },
-    { href: "/services", label: "Services" },
-    { href: "/freelancers", label: "Freelancers" },
-    { href: "/post-job", label: "Post Job" },
+    { href: "/services", label: "Browse Services" },
   ];
 
   if (isAuthenticated) {
-    navItems.push({ href: "/messages", label: "Messages" });
+    navItems.push(
+      { href: "/create-service", label: "Create Service" },
+      { href: "/find-work", label: "Find Work" },
+      { href: "/messages", label: "Messages" }
+    );
   }
 
   const NavLink = ({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) => (
@@ -88,10 +90,17 @@ export default function Navigation() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <Link href="/freelancers">
-                    <span className="w-full" data-testid="link-top-freelancers">Top Freelancers</span>
+                  <Link href="/find-work">
+                    <span className="w-full" data-testid="link-find-work">Find Jobs</span>
                   </Link>
                 </DropdownMenuItem>
+                {isAuthenticated && (
+                  <DropdownMenuItem>
+                    <Link href="/create-service">
+                      <span className="w-full" data-testid="link-create-service">Create Service</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -116,6 +125,16 @@ export default function Navigation() {
                 <DropdownMenuItem>
                   <Link href="/freelancers">
                     <span className="w-full" data-testid="link-find-freelancers">Find Freelancers</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/top-freelancers">
+                    <span className="w-full" data-testid="link-top-freelancers">Top Freelancers</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/hire-talent">
+                    <span className="w-full" data-testid="link-hire-talent">Hire Talent</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

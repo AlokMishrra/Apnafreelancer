@@ -167,11 +167,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Freelancer routes
   app.get('/api/freelancers', async (req, res) => {
     try {
-      const { categoryId, search } = req.query;
-      const freelancers = await storage.getFreelancers(
-        categoryId ? parseInt(categoryId as string) : undefined,
-        search as string
-      );
+      // Mock freelancers data
+      const freelancers = [
+        {
+          id: "freelancer-1",
+          firstName: "John",
+          lastName: "Smith",
+          email: "john.smith@example.com",
+          profileImageUrl: null,
+          title: "Full Stack Developer",
+          bio: "Experienced web developer with 5+ years of experience in React and Node.js",
+          hourlyRate: 75,
+          rating: 4.8,
+          totalJobs: 45,
+          skills: ["React", "Node.js", "TypeScript", "MongoDB"],
+          location: "San Francisco, CA",
+          createdAt: new Date()
+        },
+        {
+          id: "freelancer-2",
+          firstName: "Sarah",
+          lastName: "Johnson",
+          email: "sarah.johnson@example.com",
+          profileImageUrl: null,
+          title: "UI/UX Designer",
+          bio: "Creative designer specializing in modern web and mobile interfaces",
+          hourlyRate: 65,
+          rating: 4.9,
+          totalJobs: 32,
+          skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
+          location: "New York, NY",
+          createdAt: new Date()
+        },
+        {
+          id: "freelancer-3",
+          firstName: "Mike",
+          lastName: "Chen",
+          email: "mike.chen@example.com",
+          profileImageUrl: null,
+          title: "Mobile Developer",
+          bio: "Expert in iOS and Android app development",
+          hourlyRate: 80,
+          rating: 4.7,
+          totalJobs: 28,
+          skills: ["Swift", "Kotlin", "React Native", "Flutter"],
+          location: "Seattle, WA",
+          createdAt: new Date()
+        }
+      ];
       res.json(freelancers);
     } catch (error) {
       console.error("Error fetching freelancers:", error);
@@ -181,11 +224,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/freelancers/top', async (req, res) => {
     try {
-      const { limit } = req.query;
-      const freelancers = await storage.getTopFreelancers(
-        limit ? parseInt(limit as string) : undefined
-      );
-      res.json(freelancers);
+      // Mock top freelancers data
+      const topFreelancers = [
+        {
+          id: "freelancer-1",
+          firstName: "John",
+          lastName: "Smith",
+          email: "john.smith@example.com",
+          profileImageUrl: null,
+          title: "Full Stack Developer",
+          bio: "Experienced web developer with 5+ years of experience in React and Node.js",
+          hourlyRate: 75,
+          rating: 4.9,
+          totalJobs: 45,
+          skills: ["React", "Node.js", "TypeScript", "MongoDB"],
+          location: "San Francisco, CA",
+          createdAt: new Date()
+        },
+        {
+          id: "freelancer-2",
+          firstName: "Sarah",
+          lastName: "Johnson",
+          email: "sarah.johnson@example.com",
+          profileImageUrl: null,
+          title: "UI/UX Designer",
+          bio: "Creative designer specializing in modern web and mobile interfaces",
+          hourlyRate: 65,
+          rating: 4.8,
+          totalJobs: 32,
+          skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
+          location: "New York, NY",
+          createdAt: new Date()
+        },
+        {
+          id: "freelancer-3",
+          firstName: "Mike",
+          lastName: "Chen",
+          email: "mike.chen@example.com",
+          profileImageUrl: null,
+          title: "Mobile Developer",
+          bio: "Expert in iOS and Android app development",
+          hourlyRate: 80,
+          rating: 4.7,
+          totalJobs: 28,
+          skills: ["Swift", "Kotlin", "React Native", "Flutter"],
+          location: "Seattle, WA",
+          createdAt: new Date()
+        }
+      ];
+      res.json(topFreelancers);
     } catch (error) {
       console.error("Error fetching top freelancers:", error);
       res.status(500).json({ message: "Failed to fetch top freelancers" });
