@@ -20,40 +20,47 @@ import Messages from "@/pages/messages";
 import AdminPage from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
+// Protected Route Component
+function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+  const { isAuthenticated, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+  
+  if (!isAuthenticated) {
+    return <SignIn />;
+  }
+  
+  return <Component />;
+}
+
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
 
+  if (isLoading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+
   return (
     <Switch>
-      {isLoading || !isAuthenticated ? (
-        <>
-          <Route path="/" component={Landing} />
-          <Route path="/sign-in" component={SignIn} />
-          <Route path="/services" component={Services} />
-          <Route path="/services/:id" component={ServiceDetail} />
-          <Route path="/freelancers" component={Freelancers} />
-          <Route path="/freelancers/:id" component={FreelancerProfile} />
-          <Route path="/top-freelancers" component={TopFreelancers} />
-          <Route path="/hire-talent" component={HireTalent} />
-          <Route path="/post-job" component={PostJob} />
-          <Route path="/find-work" component={FindWork} />
-        </>
-      ) : (
-        <>
-          <Route path="/" component={Home} />
-          <Route path="/services" component={Services} />
-          <Route path="/services/:id" component={ServiceDetail} />
-          <Route path="/create-service" component={CreateService} />
-          <Route path="/freelancers" component={Freelancers} />
-          <Route path="/freelancers/:id" component={FreelancerProfile} />
-          <Route path="/top-freelancers" component={TopFreelancers} />
-          <Route path="/hire-talent" component={HireTalent} />
-          <Route path="/post-job" component={PostJob} />
-          <Route path="/find-work" component={FindWork} />
-          <Route path="/messages" component={Messages} />
-          <Route path="/admin" component={AdminPage} />
-        </>
-      )}
+      {/* Public routes */}
+      <Route path="/" component={isAuthenticated ? Home : Landing} />
+      <Route path="/sign-in" component={SignIn} />
+      <Route path="/services" component={Services} />
+      <Route path="/services/:id" component={ServiceDetail} />
+      <Route path="/freelancers" component={Freelancers} />
+      <Route path="/freelancers/:id" component={FreelancerProfile} />
+      <Route path="/top-freelancers" component={TopFreelancers} />
+      
+      {/* Protected routes - require authentication */}
+      <Route path="/hire-talent" component={() => <ProtectedRoute component={HireTalent} />} />
+      <Route path="/post-job" component={() => <ProtectedRoute component={PostJob} />} />
+      <Route path="/find-work" component={() => <ProtectedRoute component={FindWork} />} />
+      <Route path="/create-service" component={() => <ProtectedRoute component={CreateService} />} />
+      <Route path="/messages" component={() => <ProtectedRoute component={Messages} />} />
+      <Route path="/admin" component={() => <ProtectedRoute component={AdminPage} />} />
+      
       <Route component={NotFound} />
     </Switch>
   );
