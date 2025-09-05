@@ -6,6 +6,8 @@ import {
   proposals,
   messages,
   reviews,
+  hireRequests,
+  adminActions,
   type User,
   type UpsertUser,
   type Category,
@@ -20,6 +22,10 @@ import {
   type InsertMessage,
   type Review,
   type InsertReview,
+  type HireRequest,
+  type InsertHireRequest,
+  type AdminAction,
+  type InsertAdminAction,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and, or, ilike, count, sql } from "drizzle-orm";
@@ -68,6 +74,25 @@ export interface IStorage {
   // Review operations
   getReviewsForUser(userId: string): Promise<Review[]>;
   createReview(review: InsertReview): Promise<Review>;
+  
+  // Admin operations
+  getPendingUsers(): Promise<User[]>;
+  getPendingServices(): Promise<Service[]>;
+  getPendingJobs(): Promise<Job[]>;
+  getPendingHireRequests(): Promise<HireRequest[]>;
+  approveUser(userId: string, adminId: string): Promise<User>;
+  rejectUser(userId: string, adminId: string): Promise<User>;
+  approveService(serviceId: number, adminId: string): Promise<Service>;
+  rejectService(serviceId: number, adminId: string, reason?: string): Promise<Service>;
+  approveJob(jobId: number, adminId: string): Promise<Job>;
+  approveHireRequest(hireRequestId: number, adminId: string): Promise<HireRequest>;
+  rejectHireRequest(hireRequestId: number, adminId: string, response?: string): Promise<HireRequest>;
+  createAdminAction(action: InsertAdminAction): Promise<AdminAction>;
+  
+  // Hire request operations
+  createHireRequest(hireRequest: InsertHireRequest): Promise<HireRequest>;
+  getHireRequestsByClient(clientId: string): Promise<HireRequest[]>;
+  getHireRequestsByFreelancer(freelancerId: string): Promise<HireRequest[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -120,7 +145,7 @@ export class DatabaseStorage implements IStorage {
 
   // Service operations
   async getServices(categoryId?: number, search?: string): Promise<Service[]> {
-    let conditions = [eq(services.isActive, true)];
+    let conditions = [eq(services.isActive, true), eq(services.status, "approved")];
     
     if (categoryId) {
       conditions.push(eq(services.categoryId, categoryId));
@@ -146,7 +171,7 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(services)
-      .where(and(eq(services.freelancerId, freelancerId), eq(services.isActive, true)))
+      .where(and(eq(services.freelancerId, freelancerId), eq(services.isActive, true), eq(services.status, "approved")))
       .orderBy(desc(services.createdAt));
   }
 
@@ -228,7 +253,7 @@ export class DatabaseStorage implements IStorage {
 
   // Freelancer operations
   async getFreelancers(categoryId?: number, search?: string): Promise<User[]> {
-    let conditions = [eq(users.isFreelancer, true)];
+    let conditions = [eq(users.isFreelancer, true), eq(users.status, "approved")];
     
     if (search) {
       conditions.push(
@@ -251,7 +276,7 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(users)
-      .where(eq(users.isFreelancer, true))
+      .where(and(eq(users.isFreelancer, true), eq(users.status, "approved")))
       .orderBy(desc(users.rating))
       .limit(limit);
   }
@@ -393,6 +418,237 @@ export class DatabaseStorage implements IStorage {
       .values(review)
       .returning();
     return newReview;
+  }
+
+  // Admin operations
+  async getPendingUsers(): Promise<User[]> {
+    return await db
+      .select()
+      .from(users)
+      .where(and(eq(users.status, "pending"), eq(users.isAdmin, false)))
+      .orderBy(desc(users.createdAt));
+  }
+
+  async getPendingServices(): Promise<Service[]> {
+    return await db
+      .select()
+      .from(services)
+      .where(eq(services.status, "pending"))
+      .orderBy(desc(services.createdAt));
+  }
+
+  async getPendingJobs(): Promise<Job[]> {
+    return await db
+      .select()
+      .from(jobs)
+      .where(eq(jobs.status, "pending"))
+      .orderBy(desc(jobs.createdAt));
+  }
+
+  async getPendingHireRequests(): Promise<HireRequest[]> {
+    return await db
+      .select()
+      .from(hireRequests)
+      .where(eq(hireRequests.status, "pending"))
+      .orderBy(desc(hireRequests.createdAt));
+  }
+
+  async approveUser(userId: string, adminId: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        status: "approved", 
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "approve_user",
+      targetType: "user",
+      targetId: userId,
+      details: "User approved"
+    });
+
+    return user;
+  }
+
+  async rejectUser(userId: string, adminId: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ 
+        status: "rejected", 
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(users.id, userId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "reject_user",
+      targetType: "user",
+      targetId: userId,
+      details: "User rejected"
+    });
+
+    return user;
+  }
+
+  async approveService(serviceId: number, adminId: string): Promise<Service> {
+    const [service] = await db
+      .update(services)
+      .set({ 
+        status: "approved", 
+        isActive: true,
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(services.id, serviceId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "approve_service",
+      targetType: "service",
+      targetId: serviceId.toString(),
+      details: "Service approved and made active"
+    });
+
+    return service;
+  }
+
+  async rejectService(serviceId: number, adminId: string, reason?: string): Promise<Service> {
+    const [service] = await db
+      .update(services)
+      .set({ 
+        status: "rejected", 
+        isActive: false,
+        rejectionReason: reason,
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(services.id, serviceId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "reject_service",
+      targetType: "service",
+      targetId: serviceId.toString(),
+      details: `Service rejected${reason ? `: ${reason}` : ""}`
+    });
+
+    return service;
+  }
+
+  async approveJob(jobId: number, adminId: string): Promise<Job> {
+    const [job] = await db
+      .update(jobs)
+      .set({ 
+        status: "open", 
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(jobs.id, jobId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "approve_job",
+      targetType: "job",
+      targetId: jobId.toString(),
+      details: "Job approved and opened"
+    });
+
+    return job;
+  }
+
+  async approveHireRequest(hireRequestId: number, adminId: string): Promise<HireRequest> {
+    const [hireRequest] = await db
+      .update(hireRequests)
+      .set({ 
+        status: "approved", 
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(hireRequests.id, hireRequestId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "approve_hire_request",
+      targetType: "hire_request",
+      targetId: hireRequestId.toString(),
+      details: "Hire request approved"
+    });
+
+    return hireRequest;
+  }
+
+  async rejectHireRequest(hireRequestId: number, adminId: string, response?: string): Promise<HireRequest> {
+    const [hireRequest] = await db
+      .update(hireRequests)
+      .set({ 
+        status: "rejected", 
+        adminResponse: response,
+        approvedBy: adminId, 
+        approvedAt: new Date(),
+        updatedAt: new Date() 
+      })
+      .where(eq(hireRequests.id, hireRequestId))
+      .returning();
+
+    await this.createAdminAction({
+      adminId,
+      action: "reject_hire_request",
+      targetType: "hire_request",
+      targetId: hireRequestId.toString(),
+      details: `Hire request rejected${response ? `: ${response}` : ""}`
+    });
+
+    return hireRequest;
+  }
+
+  async createAdminAction(action: InsertAdminAction): Promise<AdminAction> {
+    const [newAction] = await db
+      .insert(adminActions)
+      .values(action)
+      .returning();
+    return newAction;
+  }
+
+  // Hire request operations
+  async createHireRequest(hireRequest: InsertHireRequest): Promise<HireRequest> {
+    const [newHireRequest] = await db
+      .insert(hireRequests)
+      .values(hireRequest)
+      .returning();
+    return newHireRequest;
+  }
+
+  async getHireRequestsByClient(clientId: string): Promise<HireRequest[]> {
+    return await db
+      .select()
+      .from(hireRequests)
+      .where(eq(hireRequests.clientId, clientId))
+      .orderBy(desc(hireRequests.createdAt));
+  }
+
+  async getHireRequestsByFreelancer(freelancerId: string): Promise<HireRequest[]> {
+    return await db
+      .select()
+      .from(hireRequests)
+      .where(eq(hireRequests.freelancerId, freelancerId))
+      .orderBy(desc(hireRequests.createdAt));
   }
 }
 

@@ -39,10 +39,14 @@ export const users = pgTable("users", {
   hourlyRate: decimal("hourly_rate", { precision: 10, scale: 2 }),
   isFreelancer: boolean("is_freelancer").default(false),
   isClient: boolean("is_client").default(false),
+  isAdmin: boolean("is_admin").default(false),
+  status: varchar("status").default("pending"), // pending, approved, rejected, suspended
   rating: decimal("rating", { precision: 3, scale: 2 }),
   totalReviews: integer("total_reviews").default(0),
   location: varchar("location"),
   availability: varchar("availability").default("available"),
+  approvedBy: varchar("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -67,7 +71,11 @@ export const services = pgTable("services", {
   deliveryTime: integer("delivery_time").notNull(), // in days
   images: text("images").array(),
   skills: text("skills").array(),
-  isActive: boolean("is_active").default(true),
+  status: varchar("status").default("pending"), // pending, approved, rejected
+  isActive: boolean("is_active").default(false), // Only active after approval
+  approvedBy: varchar("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
+  rejectionReason: text("rejection_reason"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -83,7 +91,9 @@ export const jobs = pgTable("jobs", {
   duration: varchar("duration", { length: 50 }).notNull(),
   experienceLevel: varchar("experience_level", { length: 20 }).notNull(),
   skills: text("skills").array(),
-  status: varchar("status", { length: 20 }).default("open"),
+  status: varchar("status", { length: 20 }).default("pending"), // pending, approved, open, closed
+  approvedBy: varchar("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -110,6 +120,35 @@ export const messages = pgTable("messages", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Hire talent requests
+export const hireRequests = pgTable("hire_requests", {
+  id: serial("id").primaryKey(),
+  clientId: varchar("client_id").references(() => users.id).notNull(),
+  freelancerId: varchar("freelancer_id").references(() => users.id).notNull(),
+  projectTitle: varchar("project_title", { length: 200 }).notNull(),
+  projectDescription: text("project_description").notNull(),
+  budget: decimal("budget", { precision: 10, scale: 2 }),
+  deadline: timestamp("deadline"),
+  status: varchar("status").default("pending"), // pending, approved, rejected, completed
+  clientMessage: text("client_message"),
+  adminResponse: text("admin_response"),
+  approvedBy: varchar("approved_by").references(() => users.id),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Admin actions log
+export const adminActions = pgTable("admin_actions", {
+  id: serial("id").primaryKey(),
+  adminId: varchar("admin_id").references(() => users.id).notNull(),
+  action: varchar("action").notNull(), // approve_user, reject_user, approve_service, etc.
+  targetType: varchar("target_type").notNull(), // user, service, job, hire_request
+  targetId: varchar("target_id").notNull(),
+  details: text("details"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Reviews and ratings
 export const reviews = pgTable("reviews", {
   id: serial("id").primaryKey(),
@@ -117,6 +156,7 @@ export const reviews = pgTable("reviews", {
   revieweeId: varchar("reviewee_id").references(() => users.id).notNull(),
   jobId: integer("job_id").references(() => jobs.id),
   serviceId: integer("service_id").references(() => services.id),
+  hireRequestId: integer("hire_request_id").references(() => hireRequests.id),
   rating: integer("rating").notNull(),
   comment: text("comment"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -187,6 +227,31 @@ export const messagesRelations = relations(messages, ({ one }) => ({
   }),
 }));
 
+export const hireRequestsRelations = relations(hireRequests, ({ one }) => ({
+  client: one(users, {
+    fields: [hireRequests.clientId],
+    references: [users.id],
+    relationName: "hireRequestClient",
+  }),
+  freelancer: one(users, {
+    fields: [hireRequests.freelancerId],
+    references: [users.id],
+    relationName: "hireRequestFreelancer",
+  }),
+  approver: one(users, {
+    fields: [hireRequests.approvedBy],
+    references: [users.id],
+    relationName: "hireRequestApprover",
+  }),
+}));
+
+export const adminActionsRelations = relations(adminActions, ({ one }) => ({
+  admin: one(users, {
+    fields: [adminActions.adminId],
+    references: [users.id],
+  }),
+}));
+
 export const reviewsRelations = relations(reviews, ({ one }) => ({
   reviewer: one(users, {
     fields: [reviews.reviewerId],
@@ -206,6 +271,10 @@ export const reviewsRelations = relations(reviews, ({ one }) => ({
     fields: [reviews.serviceId],
     references: [services.id],
   }),
+  hireRequest: one(hireRequests, {
+    fields: [reviews.hireRequestId],
+    references: [hireRequests.id],
+  }),
 }));
 
 // Insert schemas
@@ -216,6 +285,8 @@ export const insertJobSchema = createInsertSchema(jobs).omit({ id: true, created
 export const insertProposalSchema = createInsertSchema(proposals).omit({ id: true, createdAt: true });
 export const insertMessageSchema = createInsertSchema(messages).omit({ id: true, createdAt: true });
 export const insertReviewSchema = createInsertSchema(reviews).omit({ id: true, createdAt: true });
+export const insertHireRequestSchema = createInsertSchema(hireRequests).omit({ id: true, createdAt: true, updatedAt: true });
+export const insertAdminActionSchema = createInsertSchema(adminActions).omit({ id: true, createdAt: true });
 
 // Types
 export type UpsertUser = z.infer<typeof upsertUserSchema>;
@@ -232,3 +303,7 @@ export type InsertMessage = z.infer<typeof insertMessageSchema>;
 export type Message = typeof messages.$inferSelect;
 export type InsertReview = z.infer<typeof insertReviewSchema>;
 export type Review = typeof reviews.$inferSelect;
+export type InsertHireRequest = z.infer<typeof insertHireRequestSchema>;
+export type HireRequest = typeof hireRequests.$inferSelect;
+export type InsertAdminAction = z.infer<typeof insertAdminActionSchema>;
+export type AdminAction = typeof adminActions.$inferSelect;

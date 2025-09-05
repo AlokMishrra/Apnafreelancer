@@ -1,14 +1,15 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { registerUser, loginUser, logoutUser, requireAuth, getCurrentUser, type AuthenticatedRequest } from "./auth";
+import { registerUser, loginUser, logoutUser, requireAuth, requireAdmin, getCurrentUser, type AuthenticatedRequest } from "./auth";
 import session from "express-session";
 import { 
   insertJobSchema, 
   insertServiceSchema, 
   insertProposalSchema, 
   insertMessageSchema,
-  insertReviewSchema 
+  insertReviewSchema,
+  insertHireRequestSchema 
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -336,6 +337,149 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error creating review:", error);
       res.status(500).json({ message: "Failed to create review" });
+    }
+  });
+
+  // Admin routes
+  app.get('/api/admin/pending-users', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const users = await storage.getPendingUsers();
+      res.json(users);
+    } catch (error) {
+      console.error("Error fetching pending users:", error);
+      res.status(500).json({ message: "Failed to fetch pending users" });
+    }
+  });
+
+  app.get('/api/admin/pending-services', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const services = await storage.getPendingServices();
+      res.json(services);
+    } catch (error) {
+      console.error("Error fetching pending services:", error);
+      res.status(500).json({ message: "Failed to fetch pending services" });
+    }
+  });
+
+  app.get('/api/admin/pending-hire-requests', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const hireRequests = await storage.getPendingHireRequests();
+      res.json(hireRequests);
+    } catch (error) {
+      console.error("Error fetching pending hire requests:", error);
+      res.status(500).json({ message: "Failed to fetch pending hire requests" });
+    }
+  });
+
+  app.post('/api/admin/users/:id/approve', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.params.id;
+      const adminId = req.user!.id;
+      const user = await storage.approveUser(userId, adminId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error approving user:", error);
+      res.status(500).json({ message: "Failed to approve user" });
+    }
+  });
+
+  app.post('/api/admin/users/:id/reject', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.params.id;
+      const adminId = req.user!.id;
+      const user = await storage.rejectUser(userId, adminId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error rejecting user:", error);
+      res.status(500).json({ message: "Failed to reject user" });
+    }
+  });
+
+  app.post('/api/admin/services/:id/approve', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const serviceId = parseInt(req.params.id);
+      const adminId = req.user!.id;
+      const service = await storage.approveService(serviceId, adminId);
+      res.json(service);
+    } catch (error) {
+      console.error("Error approving service:", error);
+      res.status(500).json({ message: "Failed to approve service" });
+    }
+  });
+
+  app.post('/api/admin/services/:id/reject', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const serviceId = parseInt(req.params.id);
+      const adminId = req.user!.id;
+      const { reason } = req.body;
+      const service = await storage.rejectService(serviceId, adminId, reason);
+      res.json(service);
+    } catch (error) {
+      console.error("Error rejecting service:", error);
+      res.status(500).json({ message: "Failed to reject service" });
+    }
+  });
+
+  app.post('/api/admin/hire-requests/:id/approve', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const hireRequestId = parseInt(req.params.id);
+      const adminId = req.user!.id;
+      const hireRequest = await storage.approveHireRequest(hireRequestId, adminId);
+      res.json(hireRequest);
+    } catch (error) {
+      console.error("Error approving hire request:", error);
+      res.status(500).json({ message: "Failed to approve hire request" });
+    }
+  });
+
+  app.post('/api/admin/hire-requests/:id/reject', requireAdmin, async (req: AuthenticatedRequest, res) => {
+    try {
+      const hireRequestId = parseInt(req.params.id);
+      const adminId = req.user!.id;
+      const { response } = req.body;
+      const hireRequest = await storage.rejectHireRequest(hireRequestId, adminId, response);
+      res.json(hireRequest);
+    } catch (error) {
+      console.error("Error rejecting hire request:", error);
+      res.status(500).json({ message: "Failed to reject hire request" });
+    }
+  });
+
+  // Hire request routes
+  app.post('/api/hire-requests', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.user!.id;
+      const hireRequestData = insertHireRequestSchema.parse({
+        ...req.body,
+        clientId: userId,
+      });
+      const hireRequest = await storage.createHireRequest(hireRequestData);
+      res.status(201).json(hireRequest);
+    } catch (error) {
+      console.error("Error creating hire request:", error);
+      res.status(500).json({ message: "Failed to create hire request" });
+    }
+  });
+
+  app.get('/api/hire-requests/client', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const clientId = req.user!.id;
+      const hireRequests = await storage.getHireRequestsByClient(clientId);
+      res.json(hireRequests);
+    } catch (error) {
+      console.error("Error fetching hire requests:", error);
+      res.status(500).json({ message: "Failed to fetch hire requests" });
+    }
+  });
+
+  app.get('/api/hire-requests/freelancer', requireAuth, async (req: AuthenticatedRequest, res) => {
+    try {
+      const freelancerId = req.user!.id;
+      const hireRequests = await storage.getHireRequestsByFreelancer(freelancerId);
+      res.json(hireRequests);
+    } catch (error) {
+      console.error("Error fetching hire requests:", error);
+      res.status(500).json({ message: "Failed to fetch hire requests" });
     }
   });
 

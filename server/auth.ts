@@ -8,6 +8,7 @@ export interface AuthenticatedRequest extends Request {
     email: string;
     firstName?: string;
     lastName?: string;
+    isAdmin?: boolean;
   };
 }
 
@@ -55,6 +56,7 @@ export async function registerUser(req: Request, res: Response) {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      isAdmin: user.isAdmin || false,
     };
 
     res.status(201).json({
@@ -63,6 +65,7 @@ export async function registerUser(req: Request, res: Response) {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        isAdmin: user.isAdmin || false,
       }
     });
   } catch (error) {
@@ -104,6 +107,7 @@ export async function loginUser(req: Request, res: Response) {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      isAdmin: user.isAdmin || false,
     };
 
     res.json({
@@ -112,6 +116,7 @@ export async function loginUser(req: Request, res: Response) {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
+        isAdmin: user.isAdmin || false,
       }
     });
   } catch (error) {
@@ -155,4 +160,20 @@ export function getCurrentUser(req: AuthenticatedRequest, res: Response) {
   }
 
   res.json(session.user);
+}
+
+// Admin authorization middleware
+export function requireAdmin(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const session = req.session as any;
+  
+  if (!session || !session.userId || !session.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  if (!session.user.isAdmin) {
+    return res.status(403).json({ message: "Admin access required" });
+  }
+
+  req.user = session.user;
+  next();
 }

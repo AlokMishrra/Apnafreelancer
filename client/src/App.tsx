@@ -17,6 +17,7 @@ import HireTalent from "@/pages/hire-talent";
 import PostJob from "@/pages/post-job";
 import FindWork from "@/pages/find-work";
 import Messages from "@/pages/messages";
+import AdminPage from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -50,6 +51,7 @@ function Router() {
           <Route path="/post-job" component={PostJob} />
           <Route path="/find-work" component={FindWork} />
           <Route path="/messages" component={Messages} />
+          <Route path="/admin" component={AdminPage} />
         </>
       )}
       <Route component={NotFound} />
