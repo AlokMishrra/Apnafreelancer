@@ -132,7 +132,7 @@ export async function logoutUser(req: Request, res: Response) {
         console.error('Logout error:', err);
         return res.status(500).json({ message: "Logout failed" });
       }
-      res.clearCookie('connect.sid');
+      res.clearCookie('sessionId');
       res.json({ message: "Logged out successfully" });
     });
   } catch (error) {
