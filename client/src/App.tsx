@@ -34,6 +34,8 @@ function Router() {
           <Route path="/freelancers/:id" component={FreelancerProfile} />
           <Route path="/top-freelancers" component={TopFreelancers} />
           <Route path="/hire-talent" component={HireTalent} />
+          <Route path="/post-job" component={PostJob} />
+          <Route path="/find-work" component={FindWork} />
         </>
       ) : (
         <>

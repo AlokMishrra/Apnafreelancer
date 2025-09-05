@@ -20,20 +20,7 @@ export default function FindWork() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [sortBy, setSortBy] = useState("newest");
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to browse job opportunities",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
+  // No authentication required for browsing jobs
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
@@ -41,7 +28,6 @@ export default function FindWork() {
 
   const { data: jobs = [] } = useQuery<Job[]>({
     queryKey: ["/api/jobs", { categoryId: selectedCategory === "all" ? "" : selectedCategory, search: searchQuery }],
-    enabled: isAuthenticated,
   });
 
   // Get search query from URL params
@@ -75,9 +61,7 @@ export default function FindWork() {
     }
   });
 
-  if (!isAuthenticated && !isLoading) {
-    return null; // Will redirect to login
-  }
+  // Remove authentication check for public job browsing
 
   return (
     <div className="min-h-screen bg-background">
