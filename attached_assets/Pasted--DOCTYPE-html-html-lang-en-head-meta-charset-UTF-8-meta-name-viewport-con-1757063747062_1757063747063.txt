@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApnaFreelancer - Hire or Get Hired Fast, Easy & Secure</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EB',
+                        accent: '#FACC15',
+                        charcoal: '#1E293B',
+                        'primary-light': '#3B82F6',
+                        'accent-light': '#FDE047'
+                    },
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'pulse-slow': 'pulse 4s infinite',
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'slide-up': 'slideUp 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.5s ease-out'
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(50px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-white overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-lg border-b border-gray-100 sticky top-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center shadow-lg">
+                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-poppins font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
+                            ApnaFreelancer
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative group">
+                        Home
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    
+                    <!-- Find Work Dropdown -->
+                    <div class="relative group">
+                        <button class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative flex items-center">
+                            Find Work
+                            <svg class="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div class="p-2">
+                                <a href="#services" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                    </svg>
+                                    Browse Services
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                                    </svg>
+                                    Categories
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                                    </svg>
+                                    Featured Gigs
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    Top Freelancers
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Hire Talent Dropdown -->
+                    <div class="relative group">
+                        <button class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative flex items-center">
+                            Hire Talent
+                            <svg class="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div class="p-2">
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Post a Job
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    Find Freelancers
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Enterprise Solutions
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                                    </svg>
+                                    Talent Scout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Services Dropdown -->
+                    <div class="relative group">
+                        <button class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative flex items-center">
+                            Services
+                            <svg class="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div class="p-2">
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                                    </svg>
+                                    Web Development
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+                                    </svg>
+                                    Mobile App Development
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                    Graphic Design
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                    </svg>
+                                    Content Writing
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                                    </svg>
+                                    Digital Marketing
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Video & Animation
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#how-it-works" class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative group">
+                        How It Works
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    
+                    <!-- Resources Dropdown -->
+                    <div class="relative group">
+                        <button class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative flex items-center">
+                            Resources
+                            <svg class="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div class="p-2">
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                                    </svg>
+                                    Blog & Articles
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                    </svg>
+                                    Success Stories
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    Help Center
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    Community Forum
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                    Learning Center
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- About Dropdown -->
+                    <div class="relative group">
+                        <button class="text-charcoal hover:text-primary transition-all duration-300 font-medium relative flex items-center">
+                            About
+                            <svg class="w-4 h-4 ml-1 group-hover:rotate-180 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                            <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                        </button>
+                        <div class="absolute top-full left-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50">
+                            <div class="p-2">
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    About Us
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"></path>
+                                    </svg>
+                                    Careers
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.615a1.5 1.5 0 00-.44-1.06l-3.155-3.155A1.5 1.5 0 0016.345 5H14.5A1.5 1.5 0 0013 6.5v.615"></path>
+                                    </svg>
+                                    Press & Media
+                                </a>
+                                <a href="#" class="flex items-center px-4 py-3 text-charcoal hover:bg-primary hover:text-white rounded-xl transition-all duration-300">
+                                    <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Contact Us
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="showLogin()" class="text-primary hover:text-primary-light transition-all duration-300 font-medium">Login</button>
+                    <button onclick="showSignup()" class="bg-gradient-to-r from-primary to-primary-light text-white px-6 py-3 rounded-full hover:shadow-lg hover:scale-105 transition-all duration-300 font-semibold">
+                        Get Started
+                    </button>
+                </div>
+                <div class="lg:hidden">
+                    <button class="text-charcoal p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen bg-gradient-to-br from-blue-50 via-white to-yellow-50 overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0">
+            <div class="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute bottom-20 right-10 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse-slow"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
+            <div class="grid lg:grid-cols-2 gap-16 items-center min-h-[80vh]">
+                <div class="animate-fade-in">
+                    <div class="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-8">
+                        <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+                        #1 Freelancing Platform in South Asia
+                    </div>
+                    <h1 class="text-6xl lg:text-7xl font-poppins font-bold text-charcoal mb-8 leading-tight">
+                        Hire or Get Hired
+                        <span class="bg-gradient-to-r from-primary via-primary-light to-accent bg-clip-text text-transparent block">
+                            Fast, Easy & Secure
+                        </span>
+                    </h1>
+                    <p class="text-xl text-gray-600 mb-10 leading-relaxed max-w-lg">
+                        Connect with talented freelancers from South Asia and around the world. Build your career or grow your business with our trusted platform.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-6 mb-12">
+                        <button onclick="showSection('services')" class="group bg-gradient-to-r from-primary to-primary-light text-white px-8 py-4 rounded-full text-lg font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                            <span>Find Talent</span>
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </button>
+                        <button onclick="showSection('post-gig')" class="group bg-white text-charcoal px-8 py-4 rounded-full text-lg font-semibold border-2 border-gray-200 hover:border-accent hover:bg-accent hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center">
+                            <span>Start Freelancing</span>
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-8">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-1">50K+</div>
+                            <div class="text-sm text-gray-600">Active Freelancers</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-1">25K+</div>
+                            <div class="text-sm text-gray-600">Projects Completed</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-primary mb-1">4.9★</div>
+                            <div class="text-sm text-gray-600">Average Rating</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative animate-float">
+                    <!-- Main Freelancer Illustration -->
+                    <div class="relative">
+                        <svg viewBox="0 0 600 500" class="w-full h-auto">
+                            <!-- Background Circle -->
+                            <circle cx="300" cy="250" r="200" fill="url(#gradient1)" opacity="0.1"/>
+                            
+                            <!-- Central Freelancer Character -->
+                            <g transform="translate(250, 150)">
+                                <!-- Head -->
+                                <circle cx="50" cy="40" r="30" fill="#FED7AA"/>
+                                <!-- Hair -->
+                                <path d="M25 25 Q50 10 75 25 Q80 35 75 45 Q50 30 25 45 Q20 35 25 25" fill="#8B4513"/>
+                                <!-- Eyes -->
+                                <circle cx="42" cy="38" r="2" fill="#000"/>
+                                <circle cx="58" cy="38" r="2" fill="#000"/>
+                                <!-- Smile -->
+                                <path d="M40 48 Q50 55 60 48" stroke="#000" stroke-width="1.5" fill="none"/>
+                                
+                                <!-- Body -->
+                                <rect x="30" y="70" width="40" height="60" rx="20" fill="#3B82F6"/>
+                                <!-- Arms -->
+                                <rect x="15" y="80" width="15" height="35" rx="7" fill="#FED7AA"/>
+                                <rect x="70" y="80" width="15" height="35" rx="7" fill="#FED7AA"/>
+                                <!-- Legs -->
+                                <rect x="35" y="130" width="12" height="40" rx="6" fill="#1E293B"/>
+                                <rect x="53" y="130" width="12" height="40" rx="6" fill="#1E293B"/>
+                                
+                                <!-- Laptop on lap -->
+                                <rect x="25" y="110" width="50" height="30" rx="3" fill="#1E293B"/>
+                                <rect x="28" y="113" width="44" height="24" rx="2" fill="#3B82F6"/>
+                                <!-- Screen content -->
+                                <rect x="32" y="117" width="36" height="2" rx="1" fill="#FACC15"/>
+                                <rect x="32" y="122" width="28" height="2" rx="1" fill="#10B981"/>
+                                <rect x="32" y="127" width="32" height="2" rx="1" fill="#EF4444"/>
+                            </g>
+                            
+                            <!-- Client Character (Left) -->
+                            <g transform="translate(80, 180)">
+                                <!-- Head -->
+                                <circle cx="30" cy="30" r="25" fill="#FECACA"/>
+                                <!-- Hair -->
+                                <path d="M10 15 Q30 5 50 15 Q52 25 50 35 Q30 25 10 35 Q8 25 10 15" fill="#4A5568"/>
+                                <!-- Business attire -->
+                                <rect x="15" y="55" width="30" height="45" rx="15" fill="#1E293B"/>
+                                <!-- Tie -->
+                                <rect x="27" y="60" width="6" height="25" rx="3" fill="#EF4444"/>
+                                <!-- Arms -->
+                                <rect x="5" y="65" width="10" height="25" rx="5" fill="#FECACA"/>
+                                <rect x="45" y="65" width="10" height="25" rx="5" fill="#FECACA"/>
+                                <!-- Money/Payment symbol -->
+                                <circle cx="60" cy="40" r="12" fill="#10B981" opacity="0.9">
+                                    <animate attributeName="r" values="12;15;12" dur="2s" repeatCount="indefinite"/>
+                                </circle>
+                                <text x="60" y="45" text-anchor="middle" fill="white" font-size="12" font-weight="bold">$</text>
+                            </g>
+                            
+                            <!-- Designer Character (Right) -->
+                            <g transform="translate(420, 200)">
+                                <!-- Head -->
+                                <circle cx="30" cy="30" r="25" fill="#DDD6FE"/>
+                                <!-- Hair -->
+                                <path d="M8 18 Q30 8 52 18 Q54 28 52 38 Q30 28 8 38 Q6 28 8 18" fill="#7C3AED"/>
+                                <!-- Creative attire -->
+                                <rect x="15" y="55" width="30" height="45" rx="15" fill="#8B5CF6"/>
+                                <!-- Arms -->
+                                <rect x="5" y="65" width="10" height="25" rx="5" fill="#DDD6FE"/>
+                                <rect x="45" y="65" width="10" height="25" rx="5" fill="#DDD6FE"/>
+                                <!-- Design tools -->
+                                <rect x="50" y="50" width="15" height="3" rx="1" fill="#FACC15"/>
+                                <circle cx="65" cy="45" r="8" fill="#F59E0B" opacity="0.8">
+                                    <animate attributeName="cy" values="45;40;45" dur="3s" repeatCount="indefinite"/>
+                                </circle>
+                            </g>
+                            
+                            <!-- Developer Character (Bottom) -->
+                            <g transform="translate(200, 320)">
+                                <!-- Head -->
+                                <circle cx="30" cy="25" r="22" fill="#FEE2E2"/>
+                                <!-- Glasses -->
+                                <circle cx="24" cy="23" r="8" fill="none" stroke="#1E293B" stroke-width="2"/>
+                                <circle cx="36" cy="23" r="8" fill="none" stroke="#1E293B" stroke-width="2"/>
+                                <line x1="32" y1="23" x2="28" y2="23" stroke="#1E293B" stroke-width="2"/>
+                                <!-- Casual attire -->
+                                <rect x="15" y="47" width="30" height="40" rx="15" fill="#10B981"/>
+                                <!-- Code symbols floating -->
+                                <text x="65" y="35" fill="#3B82F6" font-size="14" font-weight="bold">&lt;/&gt;</text>
+                                <text x="70" y="55" fill="#EF4444" font-size="12" font-weight="bold">{}</text>
+                            </g>
+                            
+                            <!-- Floating Skill Icons -->
+                            <g>
+                                <!-- Design Icon -->
+                                <circle cx="120" cy="120" r="20" fill="#F59E0B" opacity="0.8">
+                                    <animate attributeName="cy" values="120;100;120" dur="4s" repeatCount="indefinite"/>
+                                </circle>
+                                <path d="M110 115 L120 105 L130 115 L125 125 L115 125 Z" fill="white"/>
+                                
+                                <!-- Code Icon -->
+                                <rect x="470" y="140" width="30" height="30" rx="6" fill="#3B82F6" opacity="0.8">
+                                    <animate attributeName="y" values="140;120;140" dur="5s" repeatCount="indefinite"/>
+                                </rect>
+                                <text x="485" y="160" text-anchor="middle" fill="white" font-size="12" font-weight="bold">&lt;/&gt;</text>
+                                
+                                <!-- Writing Icon -->
+                                <circle cx="480" cy="300" r="18" fill="#10B981" opacity="0.8">
+                                    <animate attributeName="r" values="18;22;18" dur="3s" repeatCount="indefinite"/>
+                                </circle>
+                                <rect x="475" y="295" width="10" height="2" rx="1" fill="white"/>
+                                <rect x="475" y="299" width="8" height="2" rx="1" fill="white"/>
+                                <rect x="475" y="303" width="12" height="2" rx="1" fill="white"/>
+                                
+                                <!-- Marketing Icon -->
+                                <polygon points="100,350 120,330 140,350 130,370 110,370" fill="#EF4444" opacity="0.8">
+                                    <animate attributeName="transform" values="translate(0,0);translate(0,-10);translate(0,0)" dur="6s" repeatCount="indefinite"/>
+                                </polygon>
+                                <circle cx="120" cy="350" r="5" fill="white"/>
+                            </g>
+                            
+                            <!-- Connection Lines -->
+                            <line x1="130" y1="220" x2="250" y2="200" stroke="#3B82F6" stroke-width="3" opacity="0.6" stroke-dasharray="8,4">
+                                <animate attributeName="stroke-dashoffset" values="0;12" dur="2s" repeatCount="indefinite"/>
+                            </line>
+                            <line x1="420" y1="240" x2="350" y2="220" stroke="#8B5CF6" stroke-width="3" opacity="0.6" stroke-dasharray="8,4">
+                                <animate attributeName="stroke-dashoffset" values="0;12" dur="2.5s" repeatCount="indefinite"/>
+                            </line>
+                            <line x1="230" y1="340" x2="280" y2="280" stroke="#10B981" stroke-width="3" opacity="0.6" stroke-dasharray="8,4">
+                                <animate attributeName="stroke-dashoffset" values="0;12" dur="3s" repeatCount="indefinite"/>
+                            </line>
+                            
+                            <!-- Success Indicators -->
+                            <g>
+                                <!-- Stars -->
+                                <polygon points="150,80 155,90 165,90 157,97 160,107 150,102 140,107 143,97 135,90 145,90" fill="#FACC15" opacity="0.9">
+                                    <animate attributeName="opacity" values="0.9;0.5;0.9" dur="2s" repeatCount="indefinite"/>
+                                </polygon>
+                                <polygon points="450,100 455,110 465,110 457,117 460,127 450,122 440,127 443,117 435,110 445,110" fill="#FACC15" opacity="0.9">
+                                    <animate attributeName="opacity" values="0.5;0.9;0.5" dur="2.5s" repeatCount="indefinite"/>
+                                </polygon>
+                                
+                                <!-- Growth Arrow -->
+                                <path d="M350 380 L380 350 L375 355 L390 340 L395 345 L380 360 L385 355 L355 385 Z" fill="#10B981" opacity="0.8">
+                                    <animate attributeName="transform" values="scale(1);scale(1.1);scale(1)" dur="3s" repeatCount="indefinite"/>
+                                </path>
+                            </g>
+                            
+                            <defs>
+                                <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#FACC15;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    
+                    <!-- Floating Cards -->
+                    <div class="absolute top-10 -left-10 bg-white rounded-2xl shadow-xl p-4 animate-bounce-slow">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-charcoal">Project Completed!</div>
+                                <div class="text-xs text-gray-500">Logo Design - $75</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="absolute bottom-10 -right-10 bg-white rounded-2xl shadow-xl p-4 animate-pulse-slow">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-primary to-primary-light rounded-full flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="text-sm font-semibold text-charcoal">New Order!</div>
+                                <div class="text-xs text-gray-500">Web Development</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 bg-gradient-to-b from-gray-50 to-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 animate-fade-in">
+                <div class="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-6">
+                    <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+                    Explore Services
+                </div>
+                <h2 class="text-5xl font-poppins font-bold text-charcoal mb-6">
+                    Find the Perfect
+                    <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Freelancer</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Browse through thousands of talented professionals ready to bring your ideas to life
+                </p>
+            </div>
+            
+            <!-- Enhanced Search Bar -->
+            <div class="max-w-4xl mx-auto mb-16">
+                <div class="bg-white rounded-3xl shadow-2xl p-8 border border-gray-100">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <div class="flex-1 relative">
+                            <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <input type="text" placeholder="What service are you looking for?" class="w-full pl-12 pr-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent text-lg transition-all duration-300">
+                        </div>
+                        <button class="bg-gradient-to-r from-primary to-primary-light text-white px-8 py-4 rounded-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 font-semibold text-lg">
+                            Search
+                        </button>
+                    </div>
+                    
+                    <!-- Category Pills -->
+                    <div class="flex flex-wrap gap-3 mt-6">
+                        <button class="px-6 py-2 bg-primary text-white rounded-full hover:bg-primary-light transition-all duration-300 text-sm font-medium">All</button>
+                        <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm font-medium">Web Development</button>
+                        <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm font-medium">Design</button>
+                        <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm font-medium">Writing</button>
+                        <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm font-medium">Marketing</button>
+                        <button class="px-6 py-2 bg-gray-100 text-gray-700 rounded-full hover:bg-primary hover:text-white transition-all duration-300 text-sm font-medium">Video & Animation</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Gig Cards -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Gig Card 1 -->
+                <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2" onclick="showGigDetails()">
+                    <div class="relative h-48 bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 overflow-hidden">
+                        <svg viewBox="0 0 300 200" class="w-full h-full">
+                            <!-- Design Elements -->
+                            <rect x="50" y="50" width="200" height="100" rx="10" fill="#3B82F6" opacity="0.8"/>
+                            <circle cx="100" cy="75" r="15" fill="#FACC15"/>
+                            <rect x="130" y="65" width="60" height="8" rx="4" fill="white"/>
+                            <rect x="130" y="80" width="40" height="6" rx="3" fill="white" opacity="0.7"/>
+                            <polygon points="200,100 220,120 180,120" fill="#10B981"/>
+                            <circle cx="220" cy="130" r="10" fill="#F59E0B"/>
+                        </svg>
+                        <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-semibold text-primary">
+                            Featured
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-charcoal mb-3 text-lg group-hover:text-primary transition-colors duration-300">
+                            I will design a professional logo for your business
+                        </h3>
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-br from-orange-200 to-pink-200 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-charcoal text-sm">Arjun Sharma</div>
+                                <div class="text-xs text-gray-500">Level 2 Seller</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400 text-sm">
+                                    ★★★★★
+                                </div>
+                                <span class="text-sm text-gray-600 ml-2">(127)</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-500">Starting at</div>
+                                <div class="font-bold text-charcoal text-lg">$25</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gig Card 2 -->
+                <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2">
+                    <div class="relative h-48 bg-gradient-to-br from-green-100 via-blue-50 to-cyan-100 overflow-hidden">
+                        <svg viewBox="0 0 300 200" class="w-full h-full">
+                            <!-- Code/Development Elements -->
+                            <rect x="40" y="40" width="220" height="120" rx="8" fill="#1E293B"/>
+                            <rect x="50" y="50" width="200" height="80" rx="4" fill="#0F172A"/>
+                            <rect x="60" y="60" width="60" height="4" rx="2" fill="#10B981"/>
+                            <rect x="60" y="70" width="80" height="4" rx="2" fill="#3B82F6"/>
+                            <rect x="60" y="80" width="40" height="4" rx="2" fill="#F59E0B"/>
+                            <rect x="60" y="90" width="100" height="4" rx="2" fill="#EF4444"/>
+                            <circle cx="70" cy="150" r="8" fill="#10B981"/>
+                            <circle cx="90" cy="150" r="8" fill="#F59E0B"/>
+                            <circle cx="110" cy="150" r="8" fill="#EF4444"/>
+                        </svg>
+                        <div class="absolute top-4 right-4 bg-green-500 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                            Online
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-charcoal mb-3 text-lg group-hover:text-primary transition-colors duration-300">
+                            I will create a responsive website using React
+                        </h3>
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-200 to-green-200 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-charcoal text-sm">Priya Patel</div>
+                                <div class="text-xs text-gray-500">Top Rated Seller</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400 text-sm">
+                                    ★★★★★
+                                </div>
+                                <span class="text-sm text-gray-600 ml-2">(89)</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-500">Starting at</div>
+                                <div class="font-bold text-charcoal text-lg">$150</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gig Card 3 -->
+                <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2">
+                    <div class="relative h-48 bg-gradient-to-br from-yellow-100 via-orange-50 to-red-100 overflow-hidden">
+                        <svg viewBox="0 0 300 200" class="w-full h-full">
+                            <!-- Writing Elements -->
+                            <rect x="60" y="50" width="180" height="100" rx="8" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+                            <rect x="80" y="70" width="140" height="4" rx="2" fill="#6B7280"/>
+                            <rect x="80" y="80" width="120" height="4" rx="2" fill="#6B7280"/>
+                            <rect x="80" y="90" width="160" height="4" rx="2" fill="#6B7280"/>
+                            <rect x="80" y="100" width="100" height="4" rx="2" fill="#6B7280"/>
+                            <rect x="80" y="120" width="140" height="4" rx="2" fill="#6B7280"/>
+                            <rect x="80" y="130" width="110" height="4" rx="2" fill="#6B7280"/>
+                            <circle cx="100" cy="30" r="12" fill="#FACC15"/>
+                            <polygon points="95,25 100,35 105,25" fill="white"/>
+                        </svg>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-charcoal mb-3 text-lg group-hover:text-primary transition-colors duration-300">
+                            I will write engaging blog posts and articles
+                        </h3>
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-br from-yellow-200 to-red-200 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-5 h-5 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-charcoal text-sm">Rahul Singh</div>
+                                <div class="text-xs text-gray-500">New Seller</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400 text-sm">
+                                    ★★★★☆
+                                </div>
+                                <span class="text-sm text-gray-600 ml-2">(45)</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-500">Starting at</div>
+                                <div class="font-bold text-charcoal text-lg">$20</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gig Card 4 -->
+                <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer transform hover:-translate-y-2">
+                    <div class="relative h-48 bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 overflow-hidden">
+                        <svg viewBox="0 0 300 200" class="w-full h-full">
+                            <!-- Mobile App Elements -->
+                            <rect x="120" y="40" width="60" height="120" rx="12" fill="#1E293B"/>
+                            <rect x="125" y="50" width="50" height="80" rx="4" fill="#3B82F6"/>
+                            <circle cx="150" cy="140" r="8" fill="#FACC15"/>
+                            <rect x="140" y="60" width="20" height="4" rx="2" fill="white"/>
+                            <rect x="140" y="70" width="15" height="4" rx="2" fill="white" opacity="0.7"/>
+                            <rect x="140" y="80" width="25" height="4" rx="2" fill="white" opacity="0.5"/>
+                            <!-- App icons -->
+                            <rect x="90" y="80" width="20" height="20" rx="4" fill="#10B981"/>
+                            <rect x="190" y="100" width="20" height="20" rx="4" fill="#F59E0B"/>
+                            <circle cx="100" cy="130" r="10" fill="#EF4444"/>
+                        </svg>
+                        <div class="absolute top-4 left-4 bg-purple-500 text-white rounded-full px-3 py-1 text-xs font-semibold">
+                            Pro
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-charcoal mb-3 text-lg group-hover:text-primary transition-colors duration-300">
+                            I will design a modern mobile app UI/UX
+                        </h3>
+                        <div class="flex items-center mb-4">
+                            <div class="w-10 h-10 bg-gradient-to-br from-purple-200 to-blue-200 rounded-full flex items-center justify-center mr-3">
+                                <svg class="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="font-semibold text-charcoal text-sm">Sneha Kumar</div>
+                                <div class="text-xs text-gray-500">Level 2 Seller</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400 text-sm">
+                                    ★★★★★
+                                </div>
+                                <span class="text-sm text-gray-600 ml-2">(203)</span>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-gray-500">Starting at</div>
+                                <div class="font-bold text-charcoal text-lg">$80</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <button class="bg-gradient-to-r from-primary to-primary-light text-white px-8 py-4 rounded-full hover:shadow-xl hover:scale-105 transition-all duration-300 font-semibold text-lg">
+                    View All Services
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Gig Details Modal -->
+    <div id="gig-details" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto animate-scale-in">
+                <div class="p-8">
+                    <div class="flex justify-between items-start mb-8">
+                        <div>
+                            <h2 class="text-3xl font-poppins font-bold text-charcoal mb-2">Professional Logo Design</h2>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex text-yellow-400">★★★★★</div>
+                                <span class="text-gray-600">(127 reviews)</span>
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Best Seller</span>
+                            </div>
+                        </div>
+                        <button onclick="hideGigDetails()" class="text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-all duration-300">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="grid lg:grid-cols-2 gap-12">
+                        <div>
+                            <!-- Enhanced Portfolio Display -->
+                            <div class="relative mb-8">
+                                <div class="w-full h-80 bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 rounded-2xl overflow-hidden">
+                                    <svg viewBox="0 0 400 300" class="w-full h-full">
+                                        <!-- Portfolio showcase -->
+                                        <rect x="50" y="50" width="300" height="200" rx="15" fill="white" stroke="#E5E7EB" stroke-width="2"/>
+                                        <circle cx="120" cy="120" r="30" fill="#3B82F6"/>
+                                        <rect x="170" y="100" width="120" height="15" rx="7" fill="#FACC15"/>
+                                        <rect x="170" y="125" width="80" height="10" rx="5" fill="#10B981"/>
+                                        <polygon points="200,160 230,190 170,190" fill="#EF4444"/>
+                                        <circle cx="280" cy="180" r="20" fill="#8B5CF6"/>
+                                        <!-- Floating design elements -->
+                                        <circle cx="80" cy="80" r="8" fill="#F59E0B" opacity="0.8">
+                                            <animate attributeName="r" values="8;12;8" dur="3s" repeatCount="indefinite"/>
+                                        </circle>
+                                        <rect x="320" y="70" width="15" height="15" rx="3" fill="#10B981" opacity="0.8">
+                                            <animate attributeName="transform" values="rotate(0 327 77);rotate(360 327 77)" dur="4s" repeatCount="indefinite"/>
+                                        </rect>
+                                    </svg>
+                                </div>
+                                <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl shadow-xl p-4">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                        <span class="text-sm font-medium text-charcoal">Live Portfolio</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Seller Info -->
+                            <div class="bg-gray-50 rounded-2xl p-6 mb-6">
+                                <div class="flex items-center mb-4">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-orange-200 to-pink-200 rounded-2xl flex items-center justify-center mr-4">
+                                        <svg class="w-8 h-8 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-charcoal">Arjun Sharma</h3>
+                                        <p class="text-gray-600">Professional Graphic Designer</p>
+                                        <div class="flex items-center mt-1">
+                                            <span class="bg-primary text-white px-2 py-1 rounded-full text-xs font-medium mr-2">Level 2</span>
+                                            <span class="text-green-600 text-sm">● Online</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="text-gray-600 leading-relaxed">
+                                    I'm a professional graphic designer with 5+ years of experience creating memorable logos for businesses across various industries. I specialize in modern, clean designs that capture your brand's essence.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-poppins font-bold text-charcoal mb-6">Choose Your Package</h3>
+                            
+                            <div class="space-y-4">
+                                <!-- Basic Package -->
+                                <div class="border-2 border-gray-200 rounded-2xl p-6 hover:border-primary transition-all duration-300 cursor-pointer group">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h4 class="text-lg font-bold text-charcoal group-hover:text-primary transition-colors">Basic</h4>
+                                            <p class="text-gray-600 text-sm">Perfect for startups</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-charcoal">$25</div>
+                                            <div class="text-sm text-gray-500">3-day delivery</div>
+                                        </div>
+                                    </div>
+                                    <ul class="space-y-2 text-sm">
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            1 logo concept
+                                        </li>
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            2 revisions
+                                        </li>
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            High-resolution files
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Standard Package (Featured) -->
+                                <div class="border-2 border-primary rounded-2xl p-6 bg-gradient-to-br from-primary/5 to-primary/10 relative">
+                                    <div class="absolute -top-3 left-6 bg-primary text-white px-4 py-1 rounded-full text-sm font-semibold">
+                                        Most Popular
+                                    </div>
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h4 class="text-lg font-bold text-primary">Standard</h4>
+                                            <p class="text-gray-600 text-sm">Best value for money</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-primary">$50</div>
+                                            <div class="text-sm text-gray-500">2-day delivery</div>
+                                        </div>
+                                    </div>
+                                    <ul class="space-y-2 text-sm">
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            3 logo concepts
+                                        </li>
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            5 revisions
+                                        </li>
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Color variations + Social media kit
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <!-- Premium Package -->
+                                <div class="border-2 border-gray-200 rounded-2xl p-6 hover:border-primary transition-all duration-300 cursor-pointer group">
+                                    <div class="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h4 class="text-lg font-bold text-charcoal group-hover:text-primary transition-colors">Premium</h4>
+                                            <p class="text-gray-600 text-sm">Complete branding solution</p>
+                                        </div>
+                                        <div class="text-right">
+                                            <div class="text-2xl font-bold text-charcoal">$100</div>
+                                            <div class="text-sm text-gray-500">1-day delivery</div>
+                                        </div>
+                                    </div>
+                                    <ul class="space-y-2 text-sm">
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            5 logo concepts
+                                        </li>
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Unlimited revisions
+                                        </li>
+                                        <li class="flex items-center">
+                                            <svg class="w-4 h-4 text-green-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                            Brand guidelines + Business cards
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <button class="w-full bg-gradient-to-r from-accent to-accent-light text-charcoal font-bold py-4 rounded-2xl mt-8 hover:shadow-xl hover:scale-105 transition-all duration-300 text-lg">
+                                Continue with Standard ($50)
+                            </button>
+                            
+                            <div class="flex items-center justify-center mt-6 space-x-6 text-sm text-gray-600">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Money-back guarantee
+                                </div>
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    24/7 Support
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-24 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0">
+            <div class="absolute top-20 left-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-20 right-10 w-80 h-80 bg-accent/5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 animate-fade-in">
+                <div class="inline-flex items-center px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-sm mb-6">
+                    <span class="w-2 h-2 bg-primary rounded-full mr-2 animate-pulse"></span>
+                    Simple Process
+                </div>
+                <h2 class="text-5xl font-poppins font-bold text-charcoal mb-6">
+                    How It
+                    <span class="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Works</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Get started in just three simple steps and join thousands of successful freelancers and clients
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-12 relative">
+                <!-- Connection Lines -->
+                <div class="hidden md:block absolute top-24 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-primary via-primary-light to-accent"></div>
+                
+                <!-- Step 1 -->
+                <div class="text-center group animate-slide-up">
+                    <div class="relative mb-8">
+                        <div class="w-32 h-32 bg-gradient-to-br from-primary to-primary-light rounded-3xl flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-all duration-500">
+                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center text-charcoal font-bold text-sm">
+                            1
+                        </div>
+                        <!-- Floating Elements -->
+                        <div class="absolute -top-4 -left-4 w-6 h-6 bg-accent/30 rounded-full animate-bounce-slow"></div>
+                        <div class="absolute -bottom-2 -right-6 w-4 h-4 bg-primary/30 rounded-full animate-pulse-slow"></div>
+                    </div>
+                    <h3 class="text-2xl font-poppins font-bold text-charcoal mb-4 group-hover:text-primary transition-colors duration-300">
+                        Find Perfect Talent
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Browse through thousands of skilled freelancers, check their portfolios, read reviews, and find the perfect match for your project needs.
+                    </p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.2s;">
+                    <div class="relative mb-8">
+                        <div class="w-32 h-32 bg-gradient-to-br from-accent to-accent-light rounded-3xl flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-all duration-500">
+                            <svg class="w-16 h-16 text-charcoal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            2
+                        </div>
+                        <!-- Floating Elements -->
+                        <div class="absolute -top-6 -right-4 w-5 h-5 bg-primary/30 rounded-full animate-float"></div>
+                        <div class="absolute -bottom-4 -left-2 w-3 h-3 bg-accent/40 rounded-full animate-bounce-slow"></div>
+                    </div>
+                    <h3 class="text-2xl font-poppins font-bold text-charcoal mb-4 group-hover:text-primary transition-colors duration-300">
+                        Hire & Collaborate
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Send proposals, discuss project details, set milestones, and start working together. Our platform makes collaboration seamless and efficient.
+                    </p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.4s;">
+                    <div class="relative mb-8">
+                        <div class="w-32 h-32 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-all duration-500">
+                            <svg class="w-16 h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                            </svg>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center text-charcoal font-bold text-sm">
+                            3
+                        </div>
+                        <!-- Floating Elements -->
+                        <div class="absolute -top-3 -left-6 w-4 h-4 bg-green-400/40 rounded-full animate-pulse-slow"></div>
+                        <div class="absolute -bottom-6 -right-3 w-6 h-6 bg-accent/30 rounded-full animate-float"></div>
+                    </div>
+                    <h3 class="text-2xl font-poppins font-bold text-charcoal mb-4 group-hover:text-primary transition-colors duration-300">
+                        Pay Securely
+                    </h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        Make secure payments through our escrow system. Money is released when you're completely satisfied with the delivered work. 100% protected.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <button onclick="showSignup()" class="bg-gradient-to-r from-primary to-primary-light text-white px-10 py-4 rounded-full hover:shadow-2xl hover:scale-105 transition-all duration-300 font-bold text-lg">
+                    Get Started Today
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Enhanced Login/Signup Modal -->
+    <div id="auth-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-3xl max-w-md w-full p-8 animate-scale-in">
+                <div class="text-center mb-8">
+                    <div class="w-16 h-16 bg-gradient-to-br from-primary to-primary-light rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+                        </svg>
+                    </div>
+                    <h2 id="auth-title" class="text-3xl font-poppins font-bold text-charcoal mb-2">Welcome Back</h2>
+                    <p class="text-gray-600">Sign in to your account</p>
+                </div>
+                
+                <form id="auth-form" class="space-y-6">
+                    <div id="name-field" class="hidden">
+                        <label class="block text-sm font-semibold text-charcoal mb-2">Full Name</label>
+                        <input type="text" class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-charcoal mb-2">Email Address</label>
+                        <input type="email" class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-charcoal mb-2">Password</label>
+                        <input type="password" class="w-full px-4 py-4 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-300">
+                    </div>
+                    
+                    <button type="submit" id="auth-button" class="w-full bg-gradient-to-r from-primary to-primary-light text-white font-bold py-4 rounded-2xl hover:shadow-xl hover:scale-105 transition-all duration-300 text-lg">
+                        Sign In
+                    </button>
+                </form>
+                
+                <div class="text-center mt-8">
+                    <p class="text-gray-600">
+                        <span id="auth-switch-text">Don't have an account?</span>
+                        <button id="auth-switch-button" onclick="toggleAuthMode()" class="text-primary font-bold hover:text-primary-light transition-colors duration-300 ml-1">Create Account</button>
+                    </p>
+                </div>
+                
+                <button onclick="hideAuth()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 p-2 hover:bg-gray-100 rounded-full transition-all duration-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-br from-charcoal to-gray-900 text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-primary to-primary-light rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z"/>
+                            </svg>
+                        </div>
+                        <div class="text-2xl font-poppins font-bold bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
+                            ApnaFreelancer
+                        </div>
+                    </div>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Connecting talent with opportunity across the globe. Join thousands of successful freelancers and clients.
+                    </p>
+                    <div class="flex space-x-4">
+                        <button class="w-10 h-10 bg-gray-700 hover:bg-primary text-white rounded-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                            <span class="font-bold">f</span>
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 hover:bg-primary text-white rounded-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                            <span class="font-bold">t</span>
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 hover:bg-primary text-white rounded-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                            <span class="font-bold">in</span>
+                        </button>
+                        <button class="w-10 h-10 bg-gray-700 hover:bg-primary text-white rounded-xl hover:scale-110 transition-all duration-300 flex items-center justify-center">
+                            <span class="font-bold">ig</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-lg mb-6">For Freelancers</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Find Work</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Success Stories</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Resources</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Community</span>
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-lg mb-6">For Clients</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Hire Talent</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Post a Job</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Enterprise</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Case Studies</span>
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="font-bold text-lg mb-6">Company</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">About Us</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Careers</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Press</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 flex items-center group">
+                            <span class="group-hover:translate-x-1 transition-transform duration-300">Contact</span>
+                        </a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-300">© 2024 ApnaFreelancer. All rights reserved.</p>
+                <div class="flex space-x-8 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-300 hover:text-accent transition-colors duration-300 text-sm">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let isLoginMode = true;
+
+        function showSection(sectionId) {
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function showGigDetails() {
+            document.getElementById('gig-details').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideGigDetails() {
+            document.getElementById('gig-details').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showLogin() {
+            isLoginMode = true;
+            updateAuthModal();
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showSignup() {
+            isLoginMode = false;
+            updateAuthModal();
+            document.getElementById('auth-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function hideAuth() {
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            updateAuthModal();
+        }
+
+        function updateAuthModal() {
+            const title = document.getElementById('auth-title');
+            const button = document.getElementById('auth-button');
+            const switchText = document.getElementById('auth-switch-text');
+            const switchButton = document.getElementById('auth-switch-button');
+            const nameField = document.getElementById('name-field');
+
+            if (isLoginMode) {
+                title.textContent = 'Welcome Back';
+                button.textContent = 'Sign In';
+                switchText.textContent = "Don't have an account?";
+                switchButton.textContent = 'Create Account';
+                nameField.classList.add('hidden');
+            } else {
+                title.textContent = 'Join ApnaFreelancer';
+                button.textContent = 'Create Account';
+                switchText.textContent = 'Already have an account?';
+                switchButton.textContent = 'Sign In';
+                nameField.classList.remove('hidden');
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Close modals when clicking outside
+        document.getElementById('gig-details').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideGigDetails();
+            }
+        });
+
+        document.getElementById('auth-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideAuth();
+            }
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('shadow-xl');
+            } else {
+                nav.classList.remove('shadow-xl');
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fade-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all sections for animation
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'97a49ea7b7df59cf',t:'MTc1NzA2MzcwMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
