@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -56,6 +56,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { signIn, signUp } = useAuth();
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -77,15 +78,14 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
   });
 
   const loginMutation = useMutation({
-    mutationFn: (data: LoginForm) => apiRequest("POST", "/api/auth/login", data),
+    mutationFn: (data: LoginForm) => signIn(data.email, data.password),
     onSuccess: () => {
       toast({
         title: "Welcome back!",
         description: "You have been successfully logged in.",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries();
       onClose();
-      window.location.reload();
     },
     onError: (error: any) => {
       toast({
@@ -97,15 +97,14 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
   });
 
   const registerMutation = useMutation({
-    mutationFn: (data: RegisterForm) => apiRequest("POST", "/api/auth/register", data),
+    mutationFn: (data: RegisterForm) => signUp(data.email, data.password, data.firstName, data.lastName),
     onSuccess: () => {
       toast({
         title: "Account created!",
-        description: "Your account has been created successfully. You are now logged in.",
+        description: "Your account has been created successfully. Please check your email to verify your account.",
       });
-      queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      queryClient.invalidateQueries();
       onClose();
-      window.location.reload();
     },
     onError: (error: any) => {
       toast({

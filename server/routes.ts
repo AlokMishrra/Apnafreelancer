@@ -1,8 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { registerUser, loginUser, logoutUser, requireAuth, requireAdmin, getCurrentUser, type AuthenticatedRequest } from "./auth";
-import session from "express-session";
+import { storage } from "./supabaseStorage";
+import { registerUser, loginUser, logoutUser, requireAuth, requireAdmin, getCurrentUser, type AuthenticatedRequest } from "./supabaseAuth";
 import { 
   insertJobSchema, 
   insertServiceSchema, 
@@ -13,19 +12,7 @@ import {
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Setup simple session-based auth instead of Replit OAuth
-  app.use(session({
-    secret: process.env.SESSION_SECRET || 'dev-secret-key-change-in-production',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
-    },
-  }));
-
-  // Custom Auth routes
+  // Supabase Auth routes (no session middleware needed - using JWT tokens)
   app.post('/api/auth/register', registerUser);
   app.post('/api/auth/login', loginUser);
   app.post('/api/auth/logout', logoutUser);
