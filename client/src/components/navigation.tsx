@@ -34,8 +34,8 @@ export default function Navigation() {
 
   const NavLink = ({ href, children, className = "" }: { href: string; children: React.ReactNode; className?: string }) => (
     <Link href={href}>
-      <a
-        className={`text-charcoal hover:text-primary transition-all duration-300 font-medium relative group ${className} ${
+      <span
+        className={`text-charcoal hover:text-primary transition-all duration-300 font-medium relative group cursor-pointer ${className} ${
           location === href ? "text-primary" : ""
         }`}
         data-testid={`nav-${href.replace("/", "") || "home"}`}
@@ -46,7 +46,7 @@ export default function Navigation() {
             location === href ? "w-full" : "w-0 group-hover:w-full"
           }`}
         />
-      </a>
+      </span>
     </Link>
   );
 
@@ -56,14 +56,14 @@ export default function Navigation() {
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <Link href="/">
-            <a className="flex items-center space-x-3" data-testid="logo">
+            <div className="flex items-center space-x-3 cursor-pointer" data-testid="logo">
               <div className="w-12 h-12 bg-gradient-to-br from-primary to-primary rounded-xl flex items-center justify-center shadow-lg">
                 <Shield className="w-7 h-7 text-primary-foreground" />
               </div>
               <div className="text-2xl font-poppins font-bold bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">
                 ApnaFreelancer
               </div>
-            </a>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -87,18 +87,18 @@ export default function Navigation() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/services">
                     <span className="w-full" data-testid="link-browse-services">Browse Services</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/find-work">
                     <span className="w-full" data-testid="link-find-work">Find Jobs</span>
                   </Link>
                 </DropdownMenuItem>
                 {isAuthenticated && (
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/create-service">
                       <span className="w-full" data-testid="link-create-service">Create Service</span>
                     </Link>
@@ -120,22 +120,22 @@ export default function Navigation() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/post-job">
                     <span className="w-full" data-testid="link-post-job">Post a Job</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/freelancers">
                     <span className="w-full" data-testid="link-find-freelancers">Find Freelancers</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/top-freelancers">
                     <span className="w-full" data-testid="link-top-freelancers">Top Freelancers</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/hire-talent">
                     <span className="w-full" data-testid="link-hire-talent">Hire Talent</span>
                   </Link>
@@ -198,13 +198,13 @@ export default function Navigation() {
                 <div className="flex flex-col space-y-4 mt-8">
                   {navItems.map((item) => (
                     <Link key={item.href} href={item.href}>
-                      <a
-                        className="block px-3 py-2 text-charcoal hover:text-primary font-medium"
+                      <div
+                        className="block px-3 py-2 text-charcoal hover:text-primary font-medium cursor-pointer"
                         onClick={() => setMobileMenuOpen(false)}
                         data-testid={`mobile-nav-${item.href.replace("/", "") || "home"}`}
                       >
                         {item.label}
-                      </a>
+                      </div>
                     </Link>
                   ))}
                   
