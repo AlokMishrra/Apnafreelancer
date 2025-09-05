@@ -21,7 +21,7 @@ export default function Landing() {
   });
 
   const { data: topFreelancers = [] } = useQuery<User[]>({
-    queryKey: ["/api/freelancers/top", { limit: 8 }],
+    queryKey: ["/api/freelancers/top?limit=8"],
   });
 
   const handleSearch = (query: string) => {
@@ -31,13 +31,11 @@ export default function Landing() {
   };
 
   const handleServiceClick = (serviceId: number) => {
-    // Navigate to service detail (could be implemented later)
-    console.log("View service:", serviceId);
+    window.location.href = `/services/${serviceId}`;
   };
 
   const handleFreelancerClick = (freelancerId: string) => {
-    // Navigate to freelancer profile (could be implemented later)
-    console.log("View freelancer:", freelancerId);
+    window.location.href = `/freelancers/${freelancerId}`;
   };
 
   return (

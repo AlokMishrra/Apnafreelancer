@@ -82,14 +82,14 @@ export default function Navigation() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/services">
-                    <a className="w-full" data-testid="link-browse-services">Browse Services</a>
+                    <span className="w-full" data-testid="link-browse-services">Browse Services</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/freelancers">
-                    <a className="w-full" data-testid="link-top-freelancers">Top Freelancers</a>
+                    <span className="w-full" data-testid="link-top-freelancers">Top Freelancers</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -108,14 +108,14 @@ export default function Navigation() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/post-job">
-                    <a className="w-full" data-testid="link-post-job">Post a Job</a>
+                    <span className="w-full" data-testid="link-post-job">Post a Job</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem asChild>
+                <DropdownMenuItem>
                   <Link href="/freelancers">
-                    <a className="w-full" data-testid="link-find-freelancers">Find Freelancers</a>
+                    <span className="w-full" data-testid="link-find-freelancers">Find Freelancers</span>
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>

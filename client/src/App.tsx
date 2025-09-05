@@ -7,7 +7,9 @@ import { useAuth } from "@/hooks/useAuth";
 import Landing from "@/pages/landing";
 import Home from "@/pages/home";
 import Services from "@/pages/services";
+import ServiceDetail from "@/pages/service-detail";
 import Freelancers from "@/pages/freelancers";
+import FreelancerProfile from "@/pages/freelancer-profile";
 import PostJob from "@/pages/post-job";
 import Messages from "@/pages/messages";
 import NotFound from "@/pages/not-found";
@@ -23,7 +25,9 @@ function Router() {
         <>
           <Route path="/" component={Home} />
           <Route path="/services" component={Services} />
+          <Route path="/services/:id" component={ServiceDetail} />
           <Route path="/freelancers" component={Freelancers} />
+          <Route path="/freelancers/:id" component={FreelancerProfile} />
           <Route path="/post-job" component={PostJob} />
           <Route path="/messages" component={Messages} />
         </>

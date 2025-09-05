@@ -153,6 +153,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Individual user/freelancer routes
+  app.get('/api/users/:id', async (req, res) => {
+    try {
+      const id = req.params.id;
+      const user = await storage.getUser(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Services by freelancer route
+  app.get('/api/services/by-freelancer/:id', async (req, res) => {
+    try {
+      const freelancerId = req.params.id;
+      const services = await storage.getServicesByFreelancer(freelancerId);
+      res.json(services);
+    } catch (error) {
+      console.error("Error fetching services by freelancer:", error);
+      res.status(500).json({ message: "Failed to fetch services by freelancer" });
+    }
+  });
+
   // Proposal routes
   app.get('/api/jobs/:id/proposals', isAuthenticated, async (req: any, res) => {
     try {
