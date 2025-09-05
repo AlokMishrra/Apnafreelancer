@@ -57,10 +57,10 @@ export default function JobPostForm() {
       };
       return await apiRequest("POST", "/api/jobs", payload);
     },
-    onSuccess: () => {
+    onSuccess: (data: any) => {
       toast({
-        title: "Success",
-        description: "Job posted successfully! You'll start receiving proposals soon.",
+        title: "Job Submitted Successfully!",
+        description: data.message || "Your job has been submitted for review and will be published once approved.",
       });
       form.reset();
       queryClient.invalidateQueries({ queryKey: ["/api/jobs"] });

@@ -50,6 +50,7 @@ export interface IStorage {
   
   // Job operations
   getJobs(categoryId?: number, search?: string): Promise<Job[]>;
+  getApprovedJobs(categoryId?: number, search?: string): Promise<Job[]>;
   getJobsByClient(clientId: string): Promise<Job[]>;
   getJob(id: number): Promise<Job | undefined>;
   createJob(job: InsertJob): Promise<Job>;
@@ -200,6 +201,29 @@ export class DatabaseStorage implements IStorage {
   // Job operations
   async getJobs(categoryId?: number, search?: string): Promise<Job[]> {
     let conditions = [eq(jobs.status, "open")];
+    
+    if (categoryId) {
+      conditions.push(eq(jobs.categoryId, categoryId));
+    }
+    
+    if (search) {
+      conditions.push(
+        or(
+          ilike(jobs.title, `%${search}%`),
+          ilike(jobs.description, `%${search}%`)
+        )!
+      );
+    }
+    
+    return await db
+      .select()
+      .from(jobs)
+      .where(and(...conditions))
+      .orderBy(desc(jobs.createdAt));
+  }
+
+  async getApprovedJobs(categoryId?: number, search?: string): Promise<Job[]> {
+    let conditions = [eq(jobs.status, "open")]; // "open" status means approved and active
     
     if (categoryId) {
       conditions.push(eq(jobs.categoryId, categoryId));

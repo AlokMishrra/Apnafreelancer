@@ -45,21 +45,38 @@ interface PendingHireRequest {
   createdAt: string;
 }
 
+interface PendingJob {
+  id: number;
+  title: string;
+  description: string;
+  budget: string;
+  duration: string;
+  experienceLevel: string;
+  skills?: string[];
+  clientId: string;
+  categoryId: number;
+  createdAt: string;
+}
+
 export default function AdminPage() {
   const [rejectReason, setRejectReason] = useState("");
   const [adminResponse, setAdminResponse] = useState("");
   const queryClient = useQueryClient();
 
-  const { data: pendingUsers = [], isLoading: usersLoading } = useQuery({
+  const { data: pendingUsers = [], isLoading: usersLoading } = useQuery<PendingUser[]>({
     queryKey: ['/api/admin/pending-users'],
   });
 
-  const { data: pendingServices = [], isLoading: servicesLoading } = useQuery({
+  const { data: pendingServices = [], isLoading: servicesLoading } = useQuery<PendingService[]>({
     queryKey: ['/api/admin/pending-services'],
   });
 
-  const { data: pendingHireRequests = [], isLoading: hireRequestsLoading } = useQuery({
+  const { data: pendingHireRequests = [], isLoading: hireRequestsLoading } = useQuery<PendingHireRequest[]>({
     queryKey: ['/api/admin/pending-hire-requests'],
+  });
+
+  const { data: pendingJobs = [], isLoading: jobsLoading } = useQuery<PendingJob[]>({
+    queryKey: ['/api/admin/pending-jobs'],
   });
 
   const approveUserMutation = useMutation({
@@ -186,6 +203,25 @@ export default function AdminPage() {
     rejectHireRequestMutation.mutate({ hireRequestId, response: adminResponse });
   };
 
+  const approveJobMutation = useMutation({
+    mutationFn: async (jobId: number) => {
+      const response = await fetch(`/api/admin/jobs/${jobId}/approve`, { method: 'POST' });
+      if (!response.ok) throw new Error('Failed to approve job');
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ title: "Job approved and published" });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/pending-jobs'] });
+    },
+    onError: () => {
+      toast({ title: "Failed to approve job", variant: "destructive" });
+    }
+  });
+
+  const handleApproveJob = (jobId: number) => {
+    approveJobMutation.mutate(jobId);
+  };
+
   return (
     <div className="container mx-auto px-4 py-8" data-testid="admin-dashboard">
       <div className="mb-8">
@@ -195,7 +231,7 @@ export default function AdminPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
         <Card data-testid="stat-pending-users">
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
@@ -220,6 +256,18 @@ export default function AdminPage() {
           </CardContent>
         </Card>
 
+        <Card data-testid="stat-pending-jobs">
+          <CardContent className="p-6">
+            <div className="flex items-center space-x-2">
+              <Briefcase className="h-5 w-5 text-purple-500" />
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Pending Jobs</p>
+                <p className="text-2xl font-bold">{pendingJobs.length}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card data-testid="stat-pending-hire-requests">
           <CardContent className="p-6">
             <div className="flex items-center space-x-2">
@@ -239,7 +287,7 @@ export default function AdminPage() {
               <div>
                 <p className="text-sm font-medium text-muted-foreground">Total Pending</p>
                 <p className="text-2xl font-bold">
-                  {pendingUsers.length + pendingServices.length + pendingHireRequests.length}
+                  {pendingUsers.length + pendingServices.length + pendingJobs.length + pendingHireRequests.length}
                 </p>
               </div>
             </div>
@@ -248,9 +296,10 @@ export default function AdminPage() {
       </div>
 
       <Tabs defaultValue="users" className="space-y-6" data-testid="admin-tabs">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="users" data-testid="tab-users">Pending Users</TabsTrigger>
           <TabsTrigger value="services" data-testid="tab-services">Pending Services</TabsTrigger>
+          <TabsTrigger value="jobs" data-testid="tab-jobs">Pending Jobs</TabsTrigger>
           <TabsTrigger value="hire-requests" data-testid="tab-hire-requests">Hire Requests</TabsTrigger>
         </TabsList>
 
@@ -455,6 +504,88 @@ export default function AdminPage() {
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="jobs" className="space-y-4" data-testid="jobs-tab-content">
+          <Card>
+            <CardHeader>
+              <CardTitle>Pending Job Postings</CardTitle>
+              <CardDescription>
+                Review and approve new job postings from clients
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {jobsLoading ? (
+                <div data-testid="jobs-loading">Loading jobs...</div>
+              ) : pendingJobs.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground" data-testid="no-pending-jobs">
+                  No pending job postings
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {pendingJobs.map((job: PendingJob) => (
+                    <Card key={job.id} className="border" data-testid={`job-card-${job.id}`}>
+                      <CardContent className="p-6">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <h3 className="font-semibold mb-2" data-testid={`job-title-${job.id}`}>
+                              {job.title}
+                            </h3>
+                            <p className="text-sm mb-3" data-testid={`job-description-${job.id}`}>
+                              {job.description}
+                            </p>
+                            <div className="flex items-center space-x-4 mb-2">
+                              <div className="flex items-center">
+                                <DollarSign className="h-4 w-4 text-green-600 mr-1" />
+                                <span className="font-medium" data-testid={`job-budget-${job.id}`}>
+                                  ${job.budget}
+                                </span>
+                              </div>
+                              <div className="flex items-center">
+                                <Calendar className="h-4 w-4 text-blue-600 mr-1" />
+                                <span className="text-sm" data-testid={`job-duration-${job.id}`}>
+                                  {job.duration}
+                                </span>
+                              </div>
+                              <div className="flex items-center">
+                                <Badge variant="outline" className="text-xs">
+                                  {job.experienceLevel}
+                                </Badge>
+                              </div>
+                            </div>
+                            {job.skills && job.skills.length > 0 && (
+                              <div className="flex flex-wrap gap-1 mb-2" data-testid={`job-skills-${job.id}`}>
+                                {job.skills.map((skill, index) => (
+                                  <Badge key={index} variant="outline" className="text-xs">
+                                    {skill}
+                                  </Badge>
+                                ))}
+                              </div>
+                            )}
+                            <p className="text-xs text-muted-foreground" data-testid={`job-date-${job.id}`}>
+                              Submitted: {new Date(job.createdAt).toLocaleDateString()}
+                            </p>
+                          </div>
+                          <div className="flex space-x-2">
+                            <Button
+                              onClick={() => handleApproveJob(job.id)}
+                              size="sm"
+                              className="bg-green-600 hover:bg-green-700"
+                              disabled={approveJobMutation.isPending}
+                              data-testid={`approve-job-${job.id}`}
+                            >
+                              <CheckCircle className="h-4 w-4 mr-1" />
+                              Approve
+                            </Button>
                           </div>
                         </div>
                       </CardContent>

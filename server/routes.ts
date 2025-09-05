@@ -89,25 +89,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Job routes
   app.get('/api/jobs', async (req, res) => {
     try {
-      // Mock jobs data
-      const jobs = [
-        {
-          id: 1,
-          title: "Need a React Website",
-          description: "Looking for a developer to build a modern React website",
-          budget: 1000,
-          categoryId: 1,
-          clientId: "client-1",
-          status: "open",
-          createdAt: new Date(),
-          client: {
-            id: "client-1",
-            firstName: "Jane",
-            lastName: "Doe",
-            profileImageUrl: null
-          }
-        }
-      ];
+      // Only show approved jobs to public
+      const jobs = await storage.getApprovedJobs();
       res.json(jobs);
     } catch (error) {
       console.error("Error fetching jobs:", error);
@@ -135,9 +118,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const jobData = insertJobSchema.parse({
         ...req.body,
         clientId: userId,
+        status: "pending", // All new jobs require admin approval
       });
       const job = await storage.createJob(jobData);
-      res.status(201).json(job);
+      res.status(201).json({
+        ...job,
+        message: "Job submitted successfully! It will be reviewed by our team and published once approved."
+      });
     } catch (error) {
       console.error("Error creating job:", error);
       res.status(500).json({ message: "Failed to create job" });
@@ -375,6 +362,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get('/api/admin/pending-jobs', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
+    try {
+      const jobs = await storage.getPendingJobs();
+      res.json(jobs);
+    } catch (error) {
+      console.error("Error fetching pending jobs:", error);
+      res.status(500).json({ message: "Failed to fetch pending jobs" });
+    }
+  });
+
   app.post('/api/admin/users/:id/approve', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.params.id;
@@ -433,6 +430,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error approving hire request:", error);
       res.status(500).json({ message: "Failed to approve hire request" });
+    }
+  });
+
+  app.post('/api/admin/jobs/:id/approve', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
+    try {
+      const jobId = parseInt(req.params.id);
+      const adminId = req.user!.id;
+      const job = await storage.approveJob(jobId, adminId);
+      res.json(job);
+    } catch (error) {
+      console.error("Error approving job:", error);
+      res.status(500).json({ message: "Failed to approve job" });
     }
   });
 
