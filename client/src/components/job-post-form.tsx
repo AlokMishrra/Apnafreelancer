@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { insertJobSchema } from "@shared/schema";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 import { isUnauthorizedError } from "@/lib/authUtils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { UserPlus, LogIn } from "lucide-react";
+import AuthModal from "./auth-modal";
 import type { z } from "zod";
 
 const jobFormSchema = insertJobSchema.extend({
@@ -25,6 +28,9 @@ type JobFormData = z.infer<typeof jobFormSchema>;
 export default function JobPostForm() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { isAuthenticated, isLoading } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<"login" | "register">("login");
 
   const form = useForm<JobFormData>({
     resolver: zodResolver(jobFormSchema),
@@ -62,13 +68,12 @@ export default function JobPostForm() {
     onError: (error) => {
       if (isUnauthorizedError(error)) {
         toast({
-          title: "Unauthorized",
-          description: "You are logged out. Logging in again...",
+          title: "Please sign in",
+          description: "You need to be signed in to post a job.",
           variant: "destructive",
         });
-        setTimeout(() => {
-          window.location.href = "/api/login";
-        }, 500);
+        setAuthModalTab("login");
+        setAuthModalOpen(true);
         return;
       }
       toast({
@@ -82,6 +87,57 @@ export default function JobPostForm() {
   const onSubmit = (data: JobFormData) => {
     createJobMutation.mutate(data);
   };
+
+  // Show login prompt if not authenticated
+  if (!isLoading && !isAuthenticated) {
+    return (
+      <Card className="w-full max-w-4xl mx-auto animate-scale-in" data-testid="card-login-prompt">
+        <CardContent className="p-8 text-center">
+          <div className="mb-6">
+            <UserPlus className="w-16 h-16 mx-auto text-primary mb-4" />
+            <h3 className="text-2xl font-poppins font-bold text-charcoal mb-3">
+              Sign in to Post Your Job
+            </h3>
+            <p className="text-muted-foreground text-lg">
+              Join thousands of clients who have found amazing freelancers for their projects
+            </p>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
+            <Button
+              onClick={() => {
+                setAuthModalTab("login");
+                setAuthModalOpen(true);
+              }}
+              variant="outline"
+              className="flex items-center gap-2"
+              data-testid="button-signin"
+            >
+              <LogIn className="w-4 h-4" />
+              Sign In
+            </Button>
+            <Button
+              onClick={() => {
+                setAuthModalTab("register");
+                setAuthModalOpen(true);
+              }}
+              className="flex items-center gap-2 bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary"
+              data-testid="button-join"
+            >
+              <UserPlus className="w-4 h-4" />
+              Join Now
+            </Button>
+          </div>
+          
+          <AuthModal
+            isOpen={authModalOpen}
+            onClose={() => setAuthModalOpen(false)}
+            defaultTab={authModalTab}
+          />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full max-w-4xl mx-auto animate-scale-in" data-testid="card-job-post-form">
@@ -289,6 +345,12 @@ export default function JobPostForm() {
             </div>
           </form>
         </Form>
+        
+        <AuthModal
+          isOpen={authModalOpen}
+          onClose={() => setAuthModalOpen(false)}
+          defaultTab={authModalTab}
+        />
       </CardContent>
     </Card>
   );

@@ -33,7 +33,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/register', registerUser);
   app.post('/api/auth/login', loginUser);
   app.post('/api/auth/logout', logoutUser);
-  app.get('/api/auth/user', getCurrentUser);
+  app.get('/api/auth/user', getCurrentUser as any);
 
   // Category routes
   app.get('/api/categories', async (req, res) => {
@@ -71,7 +71,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/services', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/services', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const serviceData = insertServiceSchema.parse({
@@ -129,7 +129,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/jobs', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/jobs', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const jobData = insertJobSchema.parse({
@@ -240,7 +240,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Proposal routes
-  app.get('/api/jobs/:id/proposals', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/jobs/:id/proposals', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const jobId = parseInt(req.params.id);
       const proposals = await storage.getProposalsForJob(jobId);
@@ -251,7 +251,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/proposals', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/proposals', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const proposalData = insertProposalSchema.parse({
@@ -267,7 +267,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Message routes
-  app.get('/api/conversations', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/conversations', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const conversations = await storage.getConversations(userId);
@@ -278,7 +278,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/messages/:userId', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/messages/:userId', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const currentUserId = req.user!.id;
       const otherUserId = req.params.userId;
@@ -290,7 +290,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/messages', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/messages', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const messageData = insertMessageSchema.parse({
@@ -305,7 +305,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/messages/read/:userId', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.put('/api/messages/read/:userId', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const currentUserId = req.user!.id;
       const otherUserId = req.params.userId;
@@ -329,7 +329,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/reviews', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/reviews', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const reviewData = insertReviewSchema.parse({
@@ -345,7 +345,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin routes
-  app.get('/api/admin/pending-users', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-users', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const users = await storage.getPendingUsers();
       res.json(users);
@@ -355,7 +355,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/admin/pending-services', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-services', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const services = await storage.getPendingServices();
       res.json(services);
@@ -365,7 +365,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/admin/pending-hire-requests', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/admin/pending-hire-requests', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const hireRequests = await storage.getPendingHireRequests();
       res.json(hireRequests);
@@ -375,7 +375,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/users/:id/approve', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/admin/users/:id/approve', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.params.id;
       const adminId = req.user!.id;
@@ -387,7 +387,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/users/:id/reject', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/admin/users/:id/reject', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.params.id;
       const adminId = req.user!.id;
@@ -399,7 +399,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/services/:id/approve', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/admin/services/:id/approve', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const serviceId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -411,7 +411,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/services/:id/reject', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/admin/services/:id/reject', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const serviceId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -424,7 +424,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/hire-requests/:id/approve', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/admin/hire-requests/:id/approve', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const hireRequestId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -436,7 +436,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/admin/hire-requests/:id/reject', requireAdmin, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/admin/hire-requests/:id/reject', requireAdmin as any, async (req: AuthenticatedRequest, res) => {
     try {
       const hireRequestId = parseInt(req.params.id);
       const adminId = req.user!.id;
@@ -450,7 +450,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Hire request routes
-  app.post('/api/hire-requests', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.post('/api/hire-requests', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.user!.id;
       const hireRequestData = insertHireRequestSchema.parse({
@@ -465,7 +465,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/hire-requests/client', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/hire-requests/client', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const clientId = req.user!.id;
       const hireRequests = await storage.getHireRequestsByClient(clientId);
@@ -476,7 +476,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/hire-requests/freelancer', requireAuth, async (req: AuthenticatedRequest, res) => {
+  app.get('/api/hire-requests/freelancer', requireAuth as any, async (req: AuthenticatedRequest, res) => {
     try {
       const freelancerId = req.user!.id;
       const hireRequests = await storage.getHireRequestsByFreelancer(freelancerId);
