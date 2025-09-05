@@ -53,14 +53,32 @@ export function useAuth() {
     return userData;
   };
 
-  const signUp = async (email: string, password: string, firstName: string, lastName: string) => {
+  const signUp = async (
+    email: string, 
+    password: string, 
+    firstName: string, 
+    lastName: string, 
+    additionalData?: {
+      isFreelancer?: boolean;
+      isClient?: boolean;
+      bio?: string | null;
+      skills?: string[];
+      hourlyRate?: string | null;
+    }
+  ) => {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ email, password, firstName, lastName }),
+      body: JSON.stringify({ 
+        email, 
+        password, 
+        firstName, 
+        lastName, 
+        ...additionalData 
+      }),
     });
 
     if (!response.ok) {

@@ -14,7 +14,17 @@ export interface AuthenticatedRequest extends Request {
 
 export async function registerUser(req: Request, res: Response) {
   try {
-    const { email, password, firstName, lastName } = req.body;
+    const { 
+      email, 
+      password, 
+      firstName, 
+      lastName, 
+      isFreelancer, 
+      isClient, 
+      bio, 
+      skills, 
+      hourlyRate 
+    } = req.body;
 
     if (!email || !password || !firstName || !lastName) {
       return res.status(400).json({ 
@@ -45,8 +55,11 @@ export async function registerUser(req: Request, res: Response) {
       password: hashedPassword,
       firstName,
       lastName,
-      isFreelancer: true,
-      isClient: true,
+      isFreelancer: isFreelancer || false,
+      isClient: isClient || false,
+      bio: bio || null,
+      skills: skills || [],
+      hourlyRate: hourlyRate || null,
     });
 
     // Create session

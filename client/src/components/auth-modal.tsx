@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,8 +22,11 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogIn, UserPlus, Eye, EyeOff } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { LogIn, UserPlus, Eye, EyeOff, Briefcase, Users } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -36,9 +39,31 @@ const registerSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   confirmPassword: z.string().min(6, "Password must be at least 6 characters"),
+  role: z.enum(["freelancer", "client"], {
+    required_error: "Please select your role",
+  }),
+  bio: z.string().optional(),
+  skills: z.string().optional(),
+  hourlyRate: z.string().optional(),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
+}).refine((data) => {
+  if (data.role === "freelancer" && !data.bio) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Bio is required for freelancers",
+  path: ["bio"],
+}).refine((data) => {
+  if (data.role === "freelancer" && !data.skills) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Skills are required for freelancers",
+  path: ["skills"],
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -54,9 +79,21 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
   const [activeTab, setActiveTab] = useState<"login" | "register">(defaultTab);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<"freelancer" | "client" | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const { signIn, signUp } = useAuth();
+
+  // Reset form when tab changes
+  useEffect(() => {
+    setSelectedRole(null);
+    registerForm.reset();
+  }, [activeTab]);
+
+  // Update defaultTab when prop changes
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab]);
 
   const loginForm = useForm<LoginForm>({
     resolver: zodResolver(loginSchema),
@@ -74,6 +111,10 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
       email: "",
       password: "",
       confirmPassword: "",
+      role: "freelancer" as const,
+      bio: "",
+      skills: "",
+      hourlyRate: "",
     },
   });
 
@@ -97,11 +138,20 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
   });
 
   const registerMutation = useMutation({
-    mutationFn: (data: RegisterForm) => signUp(data.email, data.password, data.firstName, data.lastName),
+    mutationFn: (data: RegisterForm) => {
+      const additionalData = {
+        isFreelancer: data.role === "freelancer",
+        isClient: data.role === "client",
+        bio: data.bio || null,
+        skills: data.skills ? data.skills.split(",").map(s => s.trim()) : [],
+        hourlyRate: data.hourlyRate || null,
+      };
+      return signUp(data.email, data.password, data.firstName, data.lastName, additionalData);
+    },
     onSuccess: () => {
       toast({
         title: "Account created!",
-        description: "Your account has been created successfully. Please check your email to verify your account.",
+        description: "Your account has been created successfully. Welcome to ApnaFreelancer!",
       });
       queryClient.invalidateQueries();
       onClose();
@@ -137,17 +187,25 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
 
         <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "login" | "register")} className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login" data-testid="tab-login">
+            <TabsTrigger 
+              value="login" 
+              data-testid="tab-login"
+              className="transition-all duration-300 ease-in-out"
+            >
               <LogIn className="w-4 h-4 mr-2" />
               Sign In
             </TabsTrigger>
-            <TabsTrigger value="register" data-testid="tab-register">
+            <TabsTrigger 
+              value="register" 
+              data-testid="tab-register"
+              className="transition-all duration-300 ease-in-out"
+            >
               <UserPlus className="w-4 h-4 mr-2" />
               Join Now
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="login" className="space-y-4">
+          <TabsContent value="login" className="space-y-4 animate-in slide-in-from-left-2 duration-300">
             <Form {...loginForm}>
               <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
                 <FormField
@@ -228,9 +286,58 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
             </div>
           </TabsContent>
 
-          <TabsContent value="register" className="space-y-4">
+          <TabsContent value="register" className="space-y-4 animate-in slide-in-from-right-2 duration-300">
             <Form {...registerForm}>
               <form onSubmit={registerForm.handleSubmit(onRegisterSubmit)} className="space-y-4">
+                {/* Role Selection */}
+                <FormField
+                  control={registerForm.control}
+                  name="role"
+                  render={({ field }) => (
+                    <FormItem className="space-y-3">
+                      <FormLabel className="text-base font-medium">I want to:</FormLabel>
+                      <FormControl>
+                        <RadioGroup
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setSelectedRole(value as "freelancer" | "client");
+                          }}
+                          value={field.value}
+                          className="grid grid-cols-2 gap-4"
+                        >
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="freelancer" id="freelancer" data-testid="radio-freelancer" />
+                            <Label 
+                              htmlFor="freelancer" 
+                              className="flex items-center cursor-pointer p-3 rounded-lg border hover:bg-secondary/50 transition-colors duration-200 flex-1"
+                            >
+                              <Briefcase className="w-4 h-4 mr-2 text-primary" />
+                              <div>
+                                <div className="font-medium">Work as Freelancer</div>
+                                <div className="text-xs text-muted-foreground">Offer your skills</div>
+                              </div>
+                            </Label>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <RadioGroupItem value="client" id="client" data-testid="radio-client" />
+                            <Label 
+                              htmlFor="client" 
+                              className="flex items-center cursor-pointer p-3 rounded-lg border hover:bg-secondary/50 transition-colors duration-200 flex-1"
+                            >
+                              <Users className="w-4 h-4 mr-2 text-primary" />
+                              <div>
+                                <div className="font-medium">Hire Freelancers</div>
+                                <div className="text-xs text-muted-foreground">Find talent</div>
+                              </div>
+                            </Label>
+                          </div>
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={registerForm.control}
@@ -357,6 +464,67 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
                     </FormItem>
                   )}
                 />
+
+                {/* Dynamic Fields Based on Role */}
+                {registerForm.watch("role") === "freelancer" && (
+                  <div className="space-y-4 animate-in fade-in-50 duration-300">
+                    <FormField
+                      control={registerForm.control}
+                      name="bio"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Bio</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Tell us about yourself and your experience..."
+                              rows={3}
+                              data-testid="textarea-bio"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={registerForm.control}
+                      name="skills"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Skills</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="e.g. React, Node.js, Design, Writing"
+                              data-testid="input-skills"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={registerForm.control}
+                      name="hourlyRate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Hourly Rate (USD)</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="25"
+                              type="number"
+                              data-testid="input-hourly-rate"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                )}
 
                 <Button
                   type="submit"
