@@ -17,8 +17,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Auth routes
   app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
+      // Return mock user data for now
+      const user = {
+        id: req.user.claims.sub,
+        email: req.user.claims.email,
+        firstName: req.user.claims.first_name,
+        lastName: req.user.claims.last_name,
+        profileImageUrl: req.user.claims.profile_image_url,
+      };
       res.json(user);
     } catch (error) {
       console.error("Error fetching user:", error);
@@ -29,7 +35,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Category routes
   app.get('/api/categories', async (req, res) => {
     try {
-      const categories = await storage.getCategories();
+      // Mock categories data
+      const categories = [
+        { id: 1, name: "Web Development", description: "Frontend and backend development" },
+        { id: 2, name: "Mobile Development", description: "iOS and Android apps" },
+        { id: 3, name: "Design", description: "UI/UX and graphic design" },
+        { id: 4, name: "Writing", description: "Content and copywriting" },
+        { id: 5, name: "Marketing", description: "Digital marketing and SEO" }
+      ];
       res.json(categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -40,11 +53,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Service routes
   app.get('/api/services', async (req, res) => {
     try {
-      const { categoryId, search } = req.query;
-      const services = await storage.getServices(
-        categoryId ? parseInt(categoryId as string) : undefined,
-        search as string
-      );
+      // Mock services data
+      const services = [
+        {
+          id: 1,
+          title: "Professional Website Development",
+          description: "Custom website development with modern technologies",
+          price: 500,
+          categoryId: 1,
+          freelancerId: "freelancer-1",
+          freelancer: {
+            id: "freelancer-1",
+            firstName: "John",
+            lastName: "Smith",
+            profileImageUrl: null
+          }
+        }
+      ];
       res.json(services);
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -84,11 +109,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Job routes
   app.get('/api/jobs', async (req, res) => {
     try {
-      const { categoryId, search } = req.query;
-      const jobs = await storage.getJobs(
-        categoryId ? parseInt(categoryId as string) : undefined,
-        search as string
-      );
+      // Mock jobs data
+      const jobs = [
+        {
+          id: 1,
+          title: "Need a React Website",
+          description: "Looking for a developer to build a modern React website",
+          budget: 1000,
+          categoryId: 1,
+          clientId: "client-1",
+          status: "open",
+          createdAt: new Date(),
+          client: {
+            id: "client-1",
+            firstName: "Jane",
+            lastName: "Doe",
+            profileImageUrl: null
+          }
+        }
+      ];
       res.json(jobs);
     } catch (error) {
       console.error("Error fetching jobs:", error);
