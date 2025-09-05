@@ -10,11 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import AuthModal from "./auth-modal";
 
 export default function Navigation() {
   const { isAuthenticated, user } = useAuth();
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalTab, setAuthModalTab] = useState<"login" | "register">("login");
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -159,7 +162,10 @@ export default function Navigation() {
             ) : (
               <>
                 <Button
-                  onClick={() => (window.location.href = "/api/login")}
+                  onClick={() => {
+                    setAuthModalTab("login");
+                    setAuthModalOpen(true);
+                  }}
                   variant="ghost"
                   className="text-charcoal hover:text-primary"
                   data-testid="button-signin"
@@ -167,7 +173,10 @@ export default function Navigation() {
                   Sign In
                 </Button>
                 <Button
-                  onClick={() => (window.location.href = "/api/login")}
+                  onClick={() => {
+                    setAuthModalTab("register");
+                    setAuthModalOpen(true);
+                  }}
                   className="bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transform hover:scale-105"
                   data-testid="button-join"
                 >
@@ -217,7 +226,11 @@ export default function Navigation() {
                     ) : (
                       <>
                         <Button
-                          onClick={() => (window.location.href = "/api/login")}
+                          onClick={() => {
+                            setAuthModalTab("login");
+                            setAuthModalOpen(true);
+                            setMobileMenuOpen(false);
+                          }}
                           variant="ghost"
                           className="w-full text-left justify-start"
                           data-testid="mobile-button-signin"
@@ -225,7 +238,11 @@ export default function Navigation() {
                           Sign In
                         </Button>
                         <Button
-                          onClick={() => (window.location.href = "/api/login")}
+                          onClick={() => {
+                            setAuthModalTab("register");
+                            setAuthModalOpen(true);
+                            setMobileMenuOpen(false);
+                          }}
                           className="w-full bg-primary text-primary-foreground"
                           data-testid="mobile-button-join"
                         >
@@ -240,6 +257,13 @@ export default function Navigation() {
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        defaultTab={authModalTab}
+      />
     </nav>
   );
 }

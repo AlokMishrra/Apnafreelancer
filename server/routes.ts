@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { registerUser, loginUser, logoutUser, requireAuth, getCurrentUser, type AuthenticatedRequest } from "./auth";
+import session from "express-session";
 import { 
   insertJobSchema, 
   insertServiceSchema, 
@@ -11,26 +12,23 @@ import {
 } from "@shared/schema";
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Auth middleware
-  await setupAuth(app);
+  // Setup simple session-based auth instead of Replit OAuth
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'dev-secret-key-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, // Set to true in production with HTTPS
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 1 week
+    },
+  }));
 
-  // Auth routes
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
-    try {
-      // Return mock user data for now
-      const user = {
-        id: req.user.claims.sub,
-        email: req.user.claims.email,
-        firstName: req.user.claims.first_name,
-        lastName: req.user.claims.last_name,
-        profileImageUrl: req.user.claims.profile_image_url,
-      };
-      res.json(user);
-    } catch (error) {
-      console.error("Error fetching user:", error);
-      res.status(500).json({ message: "Failed to fetch user" });
-    }
-  });
+  // Custom Auth routes
+  app.post('/api/auth/register', registerUser);
+  app.post('/api/auth/login', loginUser);
+  app.post('/api/auth/logout', logoutUser);
+  app.get('/api/auth/user', getCurrentUser);
 
   // Category routes
   app.get('/api/categories', async (req, res) => {
@@ -68,9 +66,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/services', isAuthenticated, async (req: any, res) => {
+  app.post('/api/services', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       const serviceData = insertServiceSchema.parse({
         ...req.body,
         freelancerId: userId,
@@ -126,9 +124,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/jobs', isAuthenticated, async (req: any, res) => {
+  app.post('/api/jobs', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       const jobData = insertJobSchema.parse({
         ...req.body,
         clientId: userId,
@@ -237,7 +235,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Proposal routes
-  app.get('/api/jobs/:id/proposals', isAuthenticated, async (req: any, res) => {
+  app.get('/api/jobs/:id/proposals', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
       const jobId = parseInt(req.params.id);
       const proposals = await storage.getProposalsForJob(jobId);
@@ -248,9 +246,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/proposals', isAuthenticated, async (req: any, res) => {
+  app.post('/api/proposals', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       const proposalData = insertProposalSchema.parse({
         ...req.body,
         freelancerId: userId,
@@ -264,9 +262,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Message routes
-  app.get('/api/conversations', isAuthenticated, async (req: any, res) => {
+  app.get('/api/conversations', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       const conversations = await storage.getConversations(userId);
       res.json(conversations);
     } catch (error) {
@@ -275,9 +273,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/messages/:userId', isAuthenticated, async (req: any, res) => {
+  app.get('/api/messages/:userId', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const currentUserId = req.user.claims.sub;
+      const currentUserId = req.user!.id;
       const otherUserId = req.params.userId;
       const messages = await storage.getMessages(currentUserId, otherUserId);
       res.json(messages);
@@ -287,9 +285,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/messages', isAuthenticated, async (req: any, res) => {
+  app.post('/api/messages', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       const messageData = insertMessageSchema.parse({
         ...req.body,
         senderId: userId,
@@ -302,9 +300,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put('/api/messages/read/:userId', isAuthenticated, async (req: any, res) => {
+  app.put('/api/messages/read/:userId', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const currentUserId = req.user.claims.sub;
+      const currentUserId = req.user!.id;
       const otherUserId = req.params.userId;
       await storage.markMessagesAsRead(otherUserId, currentUserId);
       res.json({ success: true });
@@ -326,9 +324,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/reviews', isAuthenticated, async (req: any, res) => {
+  app.post('/api/reviews', requireAuth, async (req: AuthenticatedRequest, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user!.id;
       const reviewData = insertReviewSchema.parse({
         ...req.body,
         reviewerId: userId,
