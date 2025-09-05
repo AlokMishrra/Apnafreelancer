@@ -1,27 +1,31 @@
+import { Pool, neonConfig } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-serverless';
 import { createClient } from '@supabase/supabase-js';
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
+import ws from "ws";
 import * as schema from "@shared/schema";
 
-if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+neonConfig.webSocketConstructor = ws;
+
+if (!process.env.DATABASE_URL) {
   throw new Error(
-    "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set in environment variables",
+    "DATABASE_URL must be set. Did you forget to provision a database?",
   );
 }
 
-// Create Supabase client for authentication and real-time features
-export const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false
-    }
-  }
-);
+// Keep existing Neon database connection for data storage
+export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+export const db = drizzle({ client: pool, schema });
 
-// Create database connection using postgres.js for Drizzle
-const connectionString = `${process.env.SUPABASE_URL}/rest/v1/?apikey=${process.env.SUPABASE_SERVICE_ROLE_KEY}`;
-export const client = postgres(connectionString);
-export const db = drizzle(client, { schema });
+// Create Supabase client for authentication only
+export const supabase = (process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY) 
+  ? createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: {
+          autoRefreshToken: false,
+          persistSession: false
+        }
+      }
+    )
+  : null;
