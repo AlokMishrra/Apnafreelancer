@@ -20,28 +20,14 @@ export default function Freelancers() {
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [sortBy, setSortBy] = useState("rating");
 
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      toast({
-        title: "Unauthorized",
-        description: "You are logged out. Logging in again...",
-        variant: "destructive",
-      });
-      setTimeout(() => {
-        window.location.href = "/api/login";
-      }, 500);
-      return;
-    }
-  }, [isAuthenticated, isLoading, toast]);
+  // No authentication required for browsing freelancers
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
 
   const { data: freelancers = [], isLoading: freelancersLoading } = useQuery<User[]>({
-    queryKey: ["/api/freelancers", { categoryId: selectedCategory, search: searchQuery }],
-    enabled: isAuthenticated,
+    queryKey: ["/api/freelancers", { categoryId: selectedCategory === "all" ? "" : selectedCategory, search: searchQuery }],
   });
 
   // Get search query from URL params
@@ -78,9 +64,7 @@ export default function Freelancers() {
     }
   });
 
-  if (!isAuthenticated && !isLoading) {
-    return null; // Will redirect to login
-  }
+  // Remove authentication check for public freelancer browsing
 
   return (
     <div className="min-h-screen bg-background">
@@ -123,7 +107,7 @@ export default function Freelancers() {
                 <SelectValue placeholder="All Skills" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Skills</SelectItem>
+                <SelectItem value="all">All Skills</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}

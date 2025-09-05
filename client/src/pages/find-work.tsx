@@ -40,7 +40,7 @@ export default function FindWork() {
   });
 
   const { data: jobs = [] } = useQuery<Job[]>({
-    queryKey: ["/api/jobs", { categoryId: selectedCategory, search: searchQuery }],
+    queryKey: ["/api/jobs", { categoryId: selectedCategory === "all" ? "" : selectedCategory, search: searchQuery }],
     enabled: isAuthenticated,
   });
 
@@ -119,7 +119,7 @@ export default function FindWork() {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}

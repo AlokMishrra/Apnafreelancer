@@ -21,7 +21,7 @@ export default function HireTalent() {
   });
 
   const { data: freelancers = [], isLoading } = useQuery<User[]>({
-    queryKey: ["/api/freelancers", { categoryId: selectedCategory, search: searchQuery }],
+    queryKey: ["/api/freelancers", { categoryId: selectedCategory === "all" ? "" : selectedCategory, search: searchQuery }],
   });
 
   const { data: topFreelancers = [] } = useQuery<User[]>({
@@ -136,7 +136,7 @@ export default function HireTalent() {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}
@@ -151,7 +151,7 @@ export default function HireTalent() {
                 <SelectValue placeholder="Experience" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Levels</SelectItem>
+                <SelectItem value="all">All Levels</SelectItem>
                 <SelectItem value="entry">Entry Level</SelectItem>
                 <SelectItem value="intermediate">Intermediate</SelectItem>
                 <SelectItem value="expert">Expert</SelectItem>
@@ -164,7 +164,7 @@ export default function HireTalent() {
                 <SelectValue placeholder="Budget" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Any Budget</SelectItem>
+                <SelectItem value="all">Any Budget</SelectItem>
                 <SelectItem value="budget">$10-40/hr</SelectItem>
                 <SelectItem value="standard">$40-80/hr</SelectItem>
                 <SelectItem value="premium">$80+/hr</SelectItem>

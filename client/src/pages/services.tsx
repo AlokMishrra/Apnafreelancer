@@ -20,7 +20,7 @@ export default function Services() {
   });
 
   const { data: services = [] } = useQuery<Service[]>({
-    queryKey: ["/api/services", { categoryId: selectedCategory, search: searchQuery }],
+    queryKey: ["/api/services", { categoryId: selectedCategory === "all" ? "" : selectedCategory, search: searchQuery }],
   });
 
   // Get search query from URL params
@@ -93,7 +93,7 @@ export default function Services() {
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {categories.map((category) => (
                   <SelectItem key={category.id} value={category.id.toString()}>
                     {category.name}
