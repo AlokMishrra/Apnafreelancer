@@ -152,14 +152,7 @@ export default function Navigation() {
                   Welcome, {(user as any)?.firstName || (user as any)?.email}
                 </span>
                 <Button
-                  onClick={async () => {
-                    try {
-                      await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
-                      window.location.href = '/';
-                    } catch (error) {
-                      console.error('Logout failed:', error);
-                    }
-                  }}
+                  onClick={() => (window.location.href = "/api/logout")}
                   variant="outline"
                   data-testid="button-logout"
                 >
@@ -168,23 +161,27 @@ export default function Navigation() {
               </>
             ) : (
               <>
-                <Link href="/sign-in">
-                  <Button
-                    variant="ghost"
-                    className="text-charcoal hover:text-primary"
-                    data-testid="button-signin"
-                  >
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/sign-in">
-                  <Button
-                    className="bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transform hover:scale-105"
-                    data-testid="button-join"
-                  >
-                    Join Now
-                  </Button>
-                </Link>
+                <Button
+                  onClick={() => {
+                    setAuthModalTab("login");
+                    setAuthModalOpen(true);
+                  }}
+                  variant="ghost"
+                  className="text-charcoal hover:text-primary"
+                  data-testid="button-signin"
+                >
+                  Sign In
+                </Button>
+                <Button
+                  onClick={() => {
+                    setAuthModalTab("register");
+                    setAuthModalOpen(true);
+                  }}
+                  className="bg-gradient-to-r from-primary to-primary hover:from-primary hover:to-primary text-primary-foreground shadow-lg hover:shadow-xl transform hover:scale-105"
+                  data-testid="button-join"
+                >
+                  Join Now
+                </Button>
               </>
             )}
           </div>
@@ -228,25 +225,29 @@ export default function Navigation() {
                       </>
                     ) : (
                       <>
-                        <Link href="/sign-in">
-                          <Button
-                            variant="ghost"
-                            className="w-full text-left justify-start"
-                            data-testid="mobile-button-signin"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            Sign In
-                          </Button>
-                        </Link>
-                        <Link href="/sign-in">
-                          <Button
-                            className="w-full bg-primary text-primary-foreground"
-                            data-testid="mobile-button-join"
-                            onClick={() => setMobileMenuOpen(false)}
-                          >
-                            Join Now
-                          </Button>
-                        </Link>
+                        <Button
+                          onClick={() => {
+                            setAuthModalTab("login");
+                            setAuthModalOpen(true);
+                            setMobileMenuOpen(false);
+                          }}
+                          variant="ghost"
+                          className="w-full text-left justify-start"
+                          data-testid="mobile-button-signin"
+                        >
+                          Sign In
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setAuthModalTab("register");
+                            setAuthModalOpen(true);
+                            setMobileMenuOpen(false);
+                          }}
+                          className="w-full bg-primary text-primary-foreground"
+                          data-testid="mobile-button-join"
+                        >
+                          Join Now
+                        </Button>
                       </>
                     )}
                   </div>
