@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { supabaseStorage as storage } from "./supabase-storage";
 import { requireSupabaseAuth, requireSupabaseAdmin, getCurrentSupabaseUser, type SupabaseAuthenticatedRequest } from "./supabase-auth";
+import { isAuthenticated } from "./replitAuth";
 import session from "express-session";
 import { nanoid } from "nanoid";
 import { 
@@ -68,9 +69,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/services', requireSupabaseAuth, async (req: any, res: any) => {
+  app.post('/api/services', isAuthenticated, async (req: any, res: any) => {
     try {
-      const userId = req.user!.id;
+      // Get user from Replit auth session
+      const user = req.user as any;
+      const userId = user.claims?.sub;
+      
+      if (!userId) {
+        return res.status(401).json({ message: "User ID not found in session" });
+      }
+      
       const serviceData = insertServiceSchema.parse({
         ...req.body,
         freelancerId: userId,

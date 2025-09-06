@@ -54,11 +54,12 @@ export default function CreateService() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(serviceData),
-        credentials: "include",
+        credentials: "include", // Include session cookies
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create service");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create service");
       }
 
       return response.json();
