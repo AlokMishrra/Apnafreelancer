@@ -33,7 +33,7 @@ export default function FreelancerCard({ freelancer, onViewProfile }: Freelancer
 
   return (
     <Card
-      className="hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-slide-up"
+      className="group hover:shadow-2xl dark:hover:shadow-slate-900/50 transition-all duration-300 transform hover:-translate-y-2 hover:scale-105 animate-slide-up bg-card/80 dark:bg-slate-800/80 backdrop-blur-sm border border-border dark:border-slate-700 hover:border-primary/50 dark:hover:border-primary/50"
       data-testid={`card-freelancer-${freelancer.id}`}
     >
       <CardContent className="p-6">
@@ -44,20 +44,20 @@ export default function FreelancerCard({ freelancer, onViewProfile }: Freelancer
               `https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150`
             }
             alt={`${freelancer.firstName} ${freelancer.lastName}`}
-            className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-primary"
+            className="w-20 h-20 rounded-full mx-auto mb-4 object-cover border-4 border-primary group-hover:border-purple-600 transition-colors duration-300 group-hover:scale-110 transform"
             data-testid={`img-freelancer-${freelancer.id}`}
           />
-          <h3 className="font-poppins font-semibold text-charcoal" data-testid={`name-freelancer-${freelancer.id}`}>
+          <h3 className="font-poppins font-semibold text-foreground dark:text-white group-hover:text-primary transition-colors duration-300" data-testid={`name-freelancer-${freelancer.id}`}>
             {freelancer.firstName} {freelancer.lastName}
           </h3>
-          <p className="text-muted-foreground text-sm mb-2">
+          <p className="text-muted-foreground dark:text-slate-400 text-sm mb-2 group-hover:text-foreground dark:group-hover:text-white transition-colors duration-300">
             {freelancer.skills?.[0] || "Freelancer"}
           </p>
           <div className="flex items-center justify-center">
             <div className="flex">
               {renderStars(Number(freelancer.rating) || 5)}
             </div>
-            <span className="ml-2 text-charcoal font-medium text-sm" data-testid={`rating-freelancer-${freelancer.id}`}>
+            <span className="ml-2 text-foreground dark:text-white font-medium text-sm group-hover:text-primary transition-colors duration-300" data-testid={`rating-freelancer-${freelancer.id}`}>
               {freelancer.rating || "5.0"} ({freelancer.totalReviews || 0})
             </span>
           </div>
@@ -65,13 +65,13 @@ export default function FreelancerCard({ freelancer, onViewProfile }: Freelancer
 
         <div className="space-y-3">
           {freelancer.location && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <MapPin className="w-4 h-4 mr-2" />
+            <div className="flex items-center text-sm text-muted-foreground dark:text-slate-400 group-hover:text-foreground dark:group-hover:text-white transition-colors duration-300">
+              <MapPin className="w-4 h-4 mr-2 text-primary" />
               <span data-testid={`location-freelancer-${freelancer.id}`}>{freelancer.location}</span>
             </div>
           )}
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Clock className="w-4 h-4 mr-2" />
+          <div className="flex items-center text-sm text-muted-foreground dark:text-slate-400 group-hover:text-foreground dark:group-hover:text-white transition-colors duration-300">
+            <Clock className="w-4 h-4 mr-2 text-green-500" />
             <span data-testid={`availability-freelancer-${freelancer.id}`}>
               {freelancer.availability === "available" ? "Available now" : "Busy"}
             </span>
@@ -79,24 +79,28 @@ export default function FreelancerCard({ freelancer, onViewProfile }: Freelancer
         </div>
 
         <div className="mt-4">
-          <p className="text-sm text-muted-foreground mb-3 line-clamp-3" data-testid={`bio-freelancer-${freelancer.id}`}>
+          <p className="text-sm text-muted-foreground dark:text-slate-300 mb-3 line-clamp-3 group-hover:text-foreground dark:group-hover:text-white transition-colors duration-300" data-testid={`bio-freelancer-${freelancer.id}`}>
             {freelancer.bio || "Experienced freelancer ready to help with your projects."}
           </p>
           <div className="flex flex-wrap gap-1 mb-3">
             {freelancer.skills?.slice(0, 3).map((skill, index) => (
-              <Badge key={index} variant="secondary" className="text-xs">
+              <Badge 
+                key={index} 
+                variant="secondary" 
+                className="text-xs bg-muted/50 dark:bg-slate-700 hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors duration-300 transform hover:scale-105"
+              >
                 {skill}
               </Badge>
             ))}
           </div>
           <div className="flex justify-between items-center">
-            <div className="text-lg font-bold text-primary" data-testid={`rate-freelancer-${freelancer.id}`}>
-              ${freelancer.hourlyRate || "50"}/hr
+            <div className="text-lg font-bold text-primary group-hover:text-purple-600 transition-colors duration-300" data-testid={`rate-freelancer-${freelancer.id}`}>
+              ₹{freelancer.hourlyRate || "50"}/hr
             </div>
             <Button
               onClick={onViewProfile}
               size="sm"
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
+              className="bg-gradient-to-r from-primary to-purple-600 text-primary-foreground hover:from-purple-600 hover:to-primary transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
               data-testid={`button-view-profile-${freelancer.id}`}
             >
               View Profile

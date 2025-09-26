@@ -165,9 +165,9 @@ export default function HireTalent() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Any Budget</SelectItem>
-                <SelectItem value="budget">$10-40/hr</SelectItem>
-                <SelectItem value="standard">$40-80/hr</SelectItem>
-                <SelectItem value="premium">$80+/hr</SelectItem>
+                <SelectItem value="budget">₹800-3200/hr</SelectItem>
+                <SelectItem value="standard">₹3200-6400/hr</SelectItem>
+                <SelectItem value="premium">₹6400+/hr</SelectItem>
               </SelectContent>
             </Select>
 

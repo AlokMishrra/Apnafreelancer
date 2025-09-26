@@ -17,8 +17,10 @@ import HireTalent from "@/pages/hire-talent";
 import PostJob from "@/pages/post-job";
 import FindWork from "@/pages/find-work";
 import Messages from "@/pages/messages";
+import StreamingAvatar from "@/pages/streaming-avatar";
 import AdminPage from "@/pages/admin";
 import NotFound from "@/pages/not-found";
+import LearningRoadmap from "@/pages/learning-roadmap";
 
 function Router() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -37,7 +39,9 @@ function Router() {
           <Route path="/hire-talent" component={HireTalent} />
           <Route path="/post-job" component={PostJob} />
           <Route path="/find-work" component={FindWork} />
+          <Route path="/streaming-avatar" component={StreamingAvatar} />
           <Route path="/admin" component={AdminPage} />
+          <Route path="/learning-roadmap" component={LearningRoadmap} />
         </>
       ) : (
         <>
@@ -52,7 +56,9 @@ function Router() {
           <Route path="/post-job" component={PostJob} />
           <Route path="/find-work" component={FindWork} />
           <Route path="/messages" component={Messages} />
+          <Route path="/streaming-avatar" component={StreamingAvatar} />
           <Route path="/admin" component={AdminPage} />
+          <Route path="/learning-roadmap" component={LearningRoadmap} />
         </>
       )}
       <Route component={NotFound} />

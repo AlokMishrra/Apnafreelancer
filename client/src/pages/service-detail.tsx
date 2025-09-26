@@ -117,7 +117,7 @@ export default function ServiceDetail() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl font-bold text-primary" data-testid="service-price">
-                  ${service.price}
+                  ₹{service.price}
                 </CardTitle>
                 <CardDescription>
                   <div className="flex items-center text-sm text-gray-600">
