@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Bot, User, Send, X, Minimize2, Maximize2, MessageSquare } from "lucide-react";
+import { Bot, User, Send, X, Minimize2, Maximize2, MessageSquare, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar } from "@/components/ui/avatar";
@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { getResponseFromKnowledgeBase } from "@/lib/chatbot-knowledge";
+import useChatbotContext from "@/hooks/useChatbotContext";
 
 type Message = {
   id: string;
@@ -23,14 +24,32 @@ type SuggestedQuestion = {
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      text: "👋 Hi there! I'm your ApnaFreelancer assistant. How can I help you today?",
-      sender: "bot",
-      timestamp: new Date(),
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    // Try to load previous messages from localStorage
+    const savedMessages = localStorage.getItem("apnafreelancer_chat");
+    if (savedMessages) {
+      try {
+        const parsedMessages = JSON.parse(savedMessages);
+        // Convert string timestamps back to Date objects
+        return parsedMessages.map((msg: any) => ({
+          ...msg,
+          timestamp: new Date(msg.timestamp)
+        }));
+      } catch (e) {
+        console.error("Failed to parse saved chat history", e);
+      }
+    }
+    
+    // Default welcome message if no saved history
+    return [
+      {
+        id: "welcome",
+        text: "👋 Hi there! I'm your ApnaFreelancer assistant. How can I help you today?",
+        sender: "bot",
+        timestamp: new Date(),
+      }
+    ];
+  });
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -57,6 +76,13 @@ export function Chatbot() {
       inputRef.current.focus();
     }
   }, [isOpen, isMinimized]);
+  
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    if (messages.length > 0) {
+      localStorage.setItem("apnafreelancer_chat", JSON.stringify(messages));
+    }
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
@@ -115,6 +141,18 @@ export function Chatbot() {
   const toggleMinimize = () => {
     setIsMinimized(!isMinimized);
   };
+  
+  const clearChat = () => {
+    // Keep only the welcome message
+    const welcomeMessage = {
+      id: `welcome-${Date.now()}`,
+      text: "👋 Chat history cleared! How can I help you today?",
+      sender: "bot" as const,
+      timestamp: new Date(),
+    };
+    setMessages([welcomeMessage]);
+    localStorage.setItem("apnafreelancer_chat", JSON.stringify([welcomeMessage]));
+  };
 
   return (
     <>
@@ -158,6 +196,15 @@ export function Chatbot() {
                   <h3 className="font-medium">ApnaFreelancer Assistant</h3>
                 </div>
                 <div className="flex items-center space-x-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-primary-foreground hover:text-primary-foreground hover:bg-primary/80"
+                    onClick={clearChat}
+                    aria-label="Clear chat history"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                   <Button
                     variant="ghost"
                     size="icon"
