@@ -12,6 +12,7 @@ import {
   insertReviewSchema,
   insertHireRequestSchema 
 } from "@shared/schema";
+import serviceApplicationsRouter from "./service-applications";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup secure session-based auth
@@ -31,11 +32,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Auth routes - Supabase handles registration/login on client side
   app.get('/api/auth/user', getCurrentSupabaseUser);
+  
+  // Mount the service applications router
+  app.use('/api', serviceApplicationsRouter);
 
   // Category routes
   app.get('/api/categories', async (req, res) => {
     try {
+      console.log("Fetching categories");
       const categories = await storage.getCategories();
+      console.log("Categories fetched successfully:", categories);
       res.json(categories);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -71,15 +77,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/services', requireSupabaseAuth, async (req: any, res: any) => {
     try {
       const userId = req.user!.id;
-      const serviceData = insertServiceSchema.parse({
-        ...req.body,
-        freelancerId: userId,
-      });
-      const service = await storage.createService(serviceData);
-      res.status(201).json(service);
-    } catch (error) {
+      console.log("Creating service for user:", userId);
+      console.log("Request body:", req.body);
+      
+      try {
+        const serviceData = insertServiceSchema.parse({
+          ...req.body,
+          freelancerId: userId,
+        });
+        
+        console.log("Validated service data:", serviceData);
+        const service = await storage.createService(serviceData);
+        console.log("Service created successfully:", service);
+        res.status(201).json(service);
+      } catch (parseError: any) {
+        console.error("Validation error:", parseError);
+        return res.status(400).json({ 
+          message: "Invalid service data", 
+          errors: parseError.errors || parseError.message 
+        });
+      }
+    } catch (error: any) {
       console.error("Error creating service:", error);
-      res.status(500).json({ message: "Failed to create service" });
+      res.status(500).json({ message: error.message || "Failed to create service" });
     }
   });
 

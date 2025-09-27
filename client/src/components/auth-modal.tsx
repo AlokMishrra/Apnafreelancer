@@ -175,7 +175,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="sm:max-w-md max-h-[90vh] overflow-hidden flex flex-col backdrop-blur-md bg-white/10 dark:bg-slate-900/50 border-white/20 dark:border-slate-800/50">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="text-center text-2xl font-poppins">
             Welcome to ApnaFreelancer

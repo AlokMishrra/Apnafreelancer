@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
+import { clearAuthCookies } from '../lib/clearAuthCookies';
 import type { User as SupabaseUser, AuthError } from '@supabase/supabase-js';
 
 interface AuthUser {
@@ -18,20 +19,58 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        fetchUserProfile(session.user.id);
-      } else {
+    // Initialize auth and clean up stale data
+    const initAuth = async () => {
+      try {
+        console.log("Initializing auth and checking for existing session");
+        
+        // Try to get the current session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session?.user) {
+          console.log(`Found existing session for user ID: ${session.user.id}`);
+          
+          try {
+            // Try to fetch the user profile
+            await fetchUserProfile(session.user.id);
+          } catch (profileError) {
+            console.error('Error fetching user profile:', profileError);
+            
+            // If we can't fetch the profile, the session might be invalid
+            // Clear everything and sign out
+            console.log("Failed to fetch user profile - clearing auth state");
+            clearAuthCookies();
+            await supabase.auth.signOut();
+            setUser(null);
+            setIsLoading(false);
+          }
+        } else {
+          console.log("No active session found");
+          // No active session, ensure we're in a clean state
+          clearAuthCookies();
+          setUser(null);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        // If there's any error, reset everything
+        clearAuthCookies();
+        await supabase.auth.signOut();
+        setUser(null);
         setIsLoading(false);
       }
-    });
+    };
+
+    initAuth();
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
+      if (event === 'SIGNED_OUT') {
+        setUser(null);
+        setIsLoading(false);
+      } else if (session?.user) {
         await fetchUserProfile(session.user.id);
       } else {
         setUser(null);
@@ -74,20 +113,38 @@ export function useAuth() {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      // First, ensure we're starting with a clean state - aggressive cleanup
+      await supabase.auth.signOut();
+      clearAuthCookies();
+      
+      // Small delay to ensure cleanup is complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      console.log(`Attempting to sign in user: ${email}`);
+      // Attempt to sign in
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      throw new Error(error.message);
+      if (error) {
+        console.error("Sign-in error:", error);
+        throw new Error(error.message);
+      }
+
+      console.log("Sign-in successful, fetching user profile");
+      if (data.user) {
+        await fetchUserProfile(data.user.id);
+        console.log("User profile fetched successfully");
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error during sign in:', error);
+      setUser(null);
+      throw error;
     }
-
-    if (data.user) {
-      await fetchUserProfile(data.user.id);
-    }
-
-    return data;
   };
 
   const signUp = async (
@@ -159,13 +216,48 @@ export function useAuth() {
   };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    
-    if (error) {
-      throw new Error(error.message);
+    try {
+      console.log("Starting sign out process - cleaning up all auth data");
+      
+      // Reset user state first to avoid any React state issues
+      setUser(null);
+      
+      // Clear auth cookies and local storage - do this before AND after the Supabase call
+      clearAuthCookies();
+      
+      // Call Supabase signOut
+      const { error } = await supabase.auth.signOut();
+      
+      if (error) {
+        console.error("Error from Supabase during sign out:", error);
+        // Continue anyway - we want to clean everything
+      }
+      
+      // Double-check that everything is cleared
+      clearAuthCookies();
+      
+      console.log("Sign out process complete - redirecting to home page");
+      
+      // Use a slight delay before redirect to ensure cleanup is complete
+      setTimeout(() => {
+        // Use replace instead of href to avoid keeping the previous page in history
+        window.location.replace('/');
+      }, 100);
+    } catch (error) {
+      console.error('Error during sign out:', error);
+      // Ensure user state is reset even if there's an error
+      setUser(null);
+      
+      // Still try to clear cookies and redirect
+      clearAuthCookies();
+      
+      // Redirect anyway with a delay
+      setTimeout(() => {
+        window.location.replace('/');
+      }, 100);
+      
+      throw error;
     }
-
-    setUser(null);
   };
 
   return {

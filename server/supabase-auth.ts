@@ -17,17 +17,42 @@ export interface SupabaseAuthenticatedRequest extends Request {
 // Middleware to verify Supabase JWT token
 export async function requireSupabaseAuth(req: SupabaseAuthenticatedRequest, res: Response, next: NextFunction) {
   try {
-    const token = req.headers.authorization?.replace('Bearer ', '');
+    // Check for Authorization header
+    let token = req.headers.authorization?.replace('Bearer ', '');
+    
+    // Also check for token in cookies as a fallback
+    if (!token && req.headers.cookie) {
+      const cookies = req.headers.cookie.split(';');
+      const authCookie = cookies.find(cookie => cookie.trim().startsWith('apna-freelancer-auth='));
+      if (authCookie) {
+        try {
+          const cookieValue = decodeURIComponent(authCookie.split('=')[1]);
+          const parsedCookie = JSON.parse(cookieValue);
+          token = parsedCookie.access_token;
+        } catch (e) {
+          console.error('Error parsing auth cookie:', e);
+        }
+      }
+    }
     
     if (!token) {
-      return res.status(401).json({ message: 'No token provided' });
+      console.error('Authentication failed: No token provided');
+      return res.status(401).json({ message: 'No authentication token provided' });
     }
 
+    console.log('Authenticating with token:', token.substring(0, 10) + '...');
+    
     // Verify the token with Supabase
     const { data, error } = await supabase.auth.getUser(token);
     
-    if (error || !data.user) {
-      return res.status(401).json({ message: 'Invalid token' });
+    if (error) {
+      console.error('Authentication failed:', error);
+      return res.status(401).json({ message: 'Invalid token: ' + error.message });
+    }
+    
+    if (!data.user) {
+      console.error('Authentication failed: No user found');
+      return res.status(401).json({ message: 'Invalid token: No user found' });
     }
 
     // Get user profile from our database

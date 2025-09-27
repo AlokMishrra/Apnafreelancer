@@ -1,15 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
-import { ChevronDown, ChevronUp, Menu, Shield, Sun, Moon } from "lucide-react";
+import { resetAuthState } from "@/lib/authUtils";
+import { ChevronDown, ChevronUp, Menu, Shield, Sun, Moon, User, LogOut, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { toast } from "@/hooks/use-toast";
 import AuthModal from "./auth-modal";
 
 
@@ -39,6 +43,22 @@ export default function Navigation() {
     
     setIsDarkMode(shouldBeDark);
     document.documentElement.classList.toggle('dark', shouldBeDark);
+    
+    // Check URL parameters for auth
+    const urlParams = new URLSearchParams(window.location.search);
+    const authParam = urlParams.get('auth');
+    
+    if (authParam === 'login') {
+      setAuthModalTab('login');
+      setAuthModalOpen(true);
+      // Remove the auth parameter from URL to avoid reopening the modal on refresh
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (authParam === 'register') {
+      setAuthModalTab('register');
+      setAuthModalOpen(true);
+      // Remove the auth parameter from URL to avoid reopening the modal on refresh
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }, []);
 
   const toggleTheme = () => {
@@ -46,6 +66,26 @@ export default function Navigation() {
     setIsDarkMode(newIsDarkMode);
     document.documentElement.classList.toggle('dark', newIsDarkMode);
     localStorage.setItem('theme', newIsDarkMode ? 'dark' : 'light');
+  };
+  
+  const handleResetAuth = async () => {
+    try {
+      toast({
+        title: "Resetting authentication state",
+        description: "Please wait while we reset your authentication...",
+      });
+      
+      await resetAuthState();
+      
+      // The resetAuthState function will reload the page automatically
+    } catch (error) {
+      console.error("Error resetting auth state:", error);
+      toast({
+        title: "Error",
+        description: "Failed to reset authentication. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   // Cleanup timeouts on unmount

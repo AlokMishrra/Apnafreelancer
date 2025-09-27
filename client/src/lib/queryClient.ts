@@ -9,14 +9,24 @@ async function throwIfResNotOk(res: Response) {
 }
 
 async function getAuthHeaders() {
-  const { data: { session } } = await supabase.auth.getSession();
-  const headers: Record<string, string> = {};
-  
-  if (session?.access_token) {
-    headers.Authorization = `Bearer ${session.access_token}`;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const headers: Record<string, string> = {};
+    
+    if (session?.access_token) {
+      headers.Authorization = `Bearer ${session.access_token}`;
+      
+      // For debugging purposes
+      console.log("Got valid auth token:", session.access_token.substring(0, 10) + "...");
+    } else {
+      console.warn("No active auth session found");
+    }
+    
+    return headers;
+  } catch (error) {
+    console.error("Error getting auth headers:", error);
+    return {};
   }
-  
-  return headers;
 }
 
 export async function apiRequest(
@@ -30,13 +40,29 @@ export async function apiRequest(
     ...(data ? { "Content-Type": "application/json" } : {}),
   };
   
+  console.log(`Making ${method} request to ${url} with auth headers:`, 
+    authHeaders.Authorization ? "Bearer token present" : "No authorization token");
+  
   const res = await fetch(url, {
     method,
     headers,
     body: data ? JSON.stringify(data) : undefined,
+    credentials: 'include', // Always include credentials
   });
 
-  await throwIfResNotOk(res);
+  if (!res.ok) {
+    console.error(`API request failed: ${res.status} ${res.statusText}`);
+    try {
+      const errorData = await res.json();
+      console.error('Error response:', errorData);
+      throw new Error(errorData.message || `${res.status}: ${res.statusText}`);
+    } catch (e) {
+      // If JSON parsing fails, use the text or status
+      const errorText = await res.text();
+      throw new Error(errorText || `${res.status}: ${res.statusText}`);
+    }
+  }
+  
   return res;
 }
 

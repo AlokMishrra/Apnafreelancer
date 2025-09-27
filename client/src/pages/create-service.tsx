@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 import Navigation from "@/components/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,26 +43,46 @@ export default function CreateService() {
     }
   }, [isAuthenticated, isLoading, toast]);
 
-  const { data: categories = [] } = useQuery<Category[]>({
+  // Fetch categories from API (might fail if database is not set up)
+  const { data: apiCategories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
   });
+  
+  // Add fallback categories in case API call fails
+  const [categories, setCategories] = useState<Category[]>([]);
+  
+  useEffect(() => {
+    // If API returns categories, use them
+    if (apiCategories && apiCategories.length > 0) {
+      console.log("Using categories from API:", apiCategories);
+      setCategories(apiCategories);
+    } else {
+      // Otherwise use fallback categories
+      console.log("Using fallback categories since API returned empty");
+      const fallbackCategories: Category[] = [
+        { id: 1, name: "Web Development", description: "Frontend, backend, and full-stack web development", icon: "💻", createdAt: new Date() },
+        { id: 2, name: "Mobile Development", description: "iOS, Android, and cross-platform mobile apps", icon: "📱", createdAt: new Date() },
+        { id: 3, name: "Design & Creative", description: "UI/UX, graphic design, branding, and creative work", icon: "🎨", createdAt: new Date() },
+        { id: 4, name: "Digital Marketing", description: "SEO, social media, content marketing, and advertising", icon: "📈", createdAt: new Date() },
+        { id: 5, name: "Writing & Content", description: "Copywriting, technical writing, and content creation", icon: "✍️", createdAt: new Date() },
+        { id: 6, name: "Data & Analytics", description: "Data science, analytics, and business intelligence", icon: "📊", createdAt: new Date() }
+      ];
+      setCategories(fallbackCategories);
+    }
+  }, [apiCategories]);
 
   const createServiceMutation = useMutation({
     mutationFn: async (serviceData: any) => {
-      const response = await fetch("/api/services", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(serviceData),
-        credentials: "include",
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to create service");
+      // Import the apiRequest function
+      const { apiRequest } = await import('@/lib/queryClient');
+      
+      try {
+        const response = await apiRequest("POST", "/api/services", serviceData);
+        return await response.json();
+      } catch (error: any) {
+        console.error("Error creating service:", error);
+        throw new Error(error.message || "Failed to create service");
       }
-
-      return response.json();
     },
     onSuccess: () => {
       toast({
@@ -106,9 +127,10 @@ export default function CreateService() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validate form fields
     if (!title.trim() || !description.trim() || !price || !categoryId) {
       toast({
         title: "Validation Error",
@@ -117,18 +139,60 @@ export default function CreateService() {
       });
       return;
     }
+    
+    try {
+      // Ensure we have a valid auth session before submitting
+      const { data } = await supabase.auth.getSession();
+      
+      if (!data.session) {
+        toast({
+          title: "Authentication Error",
+          description: "Your session has expired. Please sign in again.",
+          variant: "destructive",
+        });
+        
+        // Redirect to login after a short delay
+        setTimeout(() => {
+          window.location.href = "/api/login";
+        }, 1500);
+        return;
+      }
+      
+      // Log what we're submitting for debugging
+      console.log("Submitting service with categoryId:", categoryId);
+      
+      // Ensure categoryId is valid
+      if (!categoryId || isNaN(parseInt(categoryId))) {
+        console.error("Invalid categoryId:", categoryId);
+        toast({
+          title: "Invalid Category",
+          description: "Please select a valid category",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const serviceData = {
+        title: title.trim(),
+        description: description.trim(),
+        price: parseFloat(price),
+        categoryId: parseInt(categoryId),
+        tags,
+        deliveryTime: parseInt(deliveryTime) || 7,
+        requirements: requirements.trim(),
+      };
+      
+      console.log("Submitting service data:", serviceData);
 
-    const serviceData = {
-      title: title.trim(),
-      description: description.trim(),
-      price: parseFloat(price),
-      categoryId: parseInt(categoryId),
-      tags,
-      deliveryTime: parseInt(deliveryTime) || 7,
-      requirements: requirements.trim(),
-    };
-
-    createServiceMutation.mutate(serviceData);
+      createServiceMutation.mutate(serviceData);
+    } catch (error) {
+      console.error("Error checking auth session:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem with your request. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   if (!isAuthenticated && !isLoading) {
@@ -188,23 +252,43 @@ export default function CreateService() {
               {/* Category */}
               <div className="space-y-2">
                 <Label htmlFor="category" className="text-sm font-medium">
-                  Category *
+                  Category * {categories.length === 0 && "(Loading categories...)"}
                 </Label>
-                <Select value={categoryId} onValueChange={setCategoryId} required>
+                <Select 
+                  value={categoryId} 
+                  onValueChange={(value) => {
+                    console.log("Category selected:", value);
+                    setCategoryId(value);
+                  }} 
+                  required
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category for your service" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map((category) => (
-                      <SelectItem key={category.id} value={category.id.toString()}>
+                    {categories.length > 0 ? (
+                      categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id.toString()}>
+                          <div className="flex items-center">
+                            <Tag className="w-4 h-4 mr-2" />
+                            {category.name}
+                          </div>
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="loading" disabled>
                         <div className="flex items-center">
-                          <Tag className="w-4 h-4 mr-2" />
-                          {category.name}
+                          Loading categories...
                         </div>
                       </SelectItem>
-                    ))}
+                    )}
                   </SelectContent>
                 </Select>
+                <p className="text-xs text-muted-foreground">
+                  {categories.length > 0 
+                    ? "Select the most appropriate category for your service" 
+                    : "Categories are loading, please wait..."}
+                </p>
               </div>
 
               {/* Description */}
