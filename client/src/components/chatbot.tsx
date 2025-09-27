@@ -6,6 +6,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { getResponseFromKnowledgeBase } from "@/lib/chatbot-knowledge";
 
 type Message = {
   id: string;
@@ -39,8 +40,10 @@ export function Chatbot() {
   const suggestedQuestions: SuggestedQuestion[] = [
     { id: "q1", text: "How do I hire a freelancer?" },
     { id: "q2", text: "How do I create a service?" },
-    { id: "q3", text: "How payments work?" },
+    { id: "q3", text: "How do payments work?" },
     { id: "q4", text: "What is the service fee?" },
+    { id: "q5", text: "How do I create an account?" },
+    { id: "q6", text: "How do learning roadmaps work?" },
   ];
 
   useEffect(() => {
@@ -83,32 +86,17 @@ export function Chatbot() {
   };
 
   const generateBotResponse = (userInput: string): Message => {
+    // Basic greetings and thanks handling
     const lowercasedInput = userInput.toLowerCase();
     let response = "";
-
-    // Simple rule-based responses
-    if (lowercasedInput.includes("hire") || lowercasedInput.includes("find freelancer")) {
-      response = "To hire a freelancer, you can browse through the available services on the 'Hire Talent' page or post a specific job on the 'Post a Job' page. You can filter by skills, ratings, and budget to find the perfect match for your project.";
-    } else if (lowercasedInput.includes("create service") || lowercasedInput.includes("offer service")) {
-      response = "To create a service, log in to your account, navigate to the 'Create Service' page, and fill out the form with details about what you offer. Be specific about deliverables, pricing, and your expertise to attract clients.";
-    } else if (lowercasedInput.includes("payment") || lowercasedInput.includes("pay")) {
-      response = "Payments on ApnaFreelancer are securely processed through our platform. Clients make payments upfront, but funds are only released to freelancers once the work is completed and approved. This ensures protection for both parties.";
-    } else if (lowercasedInput.includes("fee") || lowercasedInput.includes("commission")) {
-      response = "ApnaFreelancer charges a 10% service fee on all transactions. This fee helps us maintain the platform, provide customer support, and ensure secure payment processing.";
-    } else if (lowercasedInput.includes("hello") || lowercasedInput.includes("hi") || lowercasedInput.includes("hey")) {
+    
+    if (lowercasedInput.includes("hello") || lowercasedInput.includes("hi") || lowercasedInput.includes("hey")) {
       response = "Hello! How can I assist you with ApnaFreelancer today?";
     } else if (lowercasedInput.includes("thank")) {
       response = "You're welcome! Is there anything else you'd like to know about ApnaFreelancer?";
-    } else if (lowercasedInput.includes("account") || lowercasedInput.includes("sign up") || lowercasedInput.includes("register")) {
-      response = "Creating an account is easy! Click the 'Join Now' button in the navigation bar and follow the simple registration process. You can sign up as a client, freelancer, or both.";
-    } else if (lowercasedInput.includes("profile") || lowercasedInput.includes("portfolio")) {
-      response = "To build a strong profile, add a professional photo, detailed bio, and showcase your skills and experience. For freelancers, a well-crafted portfolio can significantly increase your chances of getting hired.";
-    } else if (lowercasedInput.includes("review") || lowercasedInput.includes("rating")) {
-      response = "Ratings and reviews are crucial on ApnaFreelancer. After completing a project, clients can rate their experience with freelancers, and freelancers can rate clients. This helps build trust in the community.";
-    } else if (lowercasedInput.includes("dispute") || lowercasedInput.includes("problem") || lowercasedInput.includes("issue")) {
-      response = "If you encounter any issues with a project or payment, you can open a dispute through our Resolution Center. Our support team will review the case and help mediate a fair solution.";
     } else {
-      response = "I'm not sure I understand that question. Could you try rephrasing it? Or you can ask about hiring freelancers, creating services, payments, or service fees.";
+      // Use the knowledge base for more detailed responses
+      response = getResponseFromKnowledgeBase(userInput);
     }
 
     return {
