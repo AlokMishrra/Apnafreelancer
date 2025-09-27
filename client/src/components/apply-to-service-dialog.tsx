@@ -215,7 +215,6 @@ export default function ApplyToServiceDialog({
             const dialog = document.querySelector('[data-state="open"]');
             if (dialog) {
               // Close the dialog by calling onOpenChange
-              setAuthModalOpen(false); // Make sure auth modal is closed if opened
               document.dispatchEvent(new KeyboardEvent('keydown', {
                 key: 'Escape',
                 bubbles: true

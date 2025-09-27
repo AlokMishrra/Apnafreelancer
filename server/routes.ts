@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { supabaseStorage as storage } from "./supabase-storage";
 import { requireSupabaseAuth, requireSupabaseAdmin, getCurrentSupabaseUser, type SupabaseAuthenticatedRequest } from "./supabase-auth";
-import session from "express-session";
+import * as session from "express-session";
 import { nanoid } from "nanoid";
 import { 
   insertJobSchema, 
