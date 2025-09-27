@@ -54,6 +54,7 @@ export function Chatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { contextMessage } = useChatbotContext();
 
   // Suggested questions for users to quickly get help
   const suggestedQuestions: SuggestedQuestion[] = [
@@ -83,6 +84,23 @@ export function Chatbot() {
       localStorage.setItem("apnafreelancer_chat", JSON.stringify(messages));
     }
   }, [messages]);
+  
+  // Add context-aware suggestion when chat is opened
+  useEffect(() => {
+    if (isOpen && !isMinimized && messages.length <= 3) {
+      setIsTyping(true);
+      setTimeout(() => {
+        const contextResponseMessage = {
+          id: `context-${Date.now()}`,
+          text: contextMessage,
+          sender: "bot" as const,
+          timestamp: new Date(),
+        };
+        setMessages(prevMessages => [...prevMessages, contextResponseMessage]);
+        setIsTyping(false);
+      }, 1000);
+    }
+  }, [isOpen, isMinimized, contextMessage]);
 
   const handleSendMessage = async () => {
     if (inputValue.trim() === "") return;
