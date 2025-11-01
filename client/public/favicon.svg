@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Left side gradient (orange to blue) -->
+    <linearGradient id="leftGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#004E89;stop-opacity:1" />
+    </linearGradient>
+    <!-- Right side gradient (light blue to purple) -->
+    <linearGradient id="rightGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#7DD3FC;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333EA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Briefcase/Portfolio main body -->
+  <rect x="14" y="20" width="18" height="24" rx="2" fill="url(#leftGradient)"/>
+  <rect x="32" y="20" width="18" height="24" rx="2" fill="url(#rightGradient)"/>
+  
+  <!-- Briefcase handle/lid -->
+  <rect x="14" y="18" width="36" height="4" rx="2" fill="#1E293B" opacity="0.3"/>
+  
+  <!-- Pen nib in center (white with blue center) -->
+  <path d="M32 20 L28 30 L30 34 L32 32 L34 34 L36 30 Z" fill="white" opacity="0.95"/>
+  <circle cx="32" cy="26" r="2.5" fill="#004E89"/>
+  
+  <!-- Horizontal motion bars left side (fading outward) -->
+  <rect x="6" y="24" width="5" height="1.5" rx="0.75" fill="#FF6B35" opacity="0.7"/>
+  <rect x="4" y="28" width="7" height="1.5" rx="0.75" fill="#004E89" opacity="0.6"/>
+  <rect x="2" y="32" width="9" height="1.5" rx="0.75" fill="#004E89" opacity="0.4"/>
+  
+  <!-- Horizontal motion bars right side (fading outward) -->
+  <rect x="53" y="24" width="5" height="1.5" rx="0.75" fill="#7DD3FC" opacity="0.7"/>
+  <rect x="53" y="28" width="7" height="1.5" rx="0.75" fill="#9333EA" opacity="0.6"/>
+  <rect x="53" y="32" width="9" height="1.5" rx="0.75" fill="#9333EA" opacity="0.4"/>
+</svg>
+
