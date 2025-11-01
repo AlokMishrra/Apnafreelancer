@@ -1,7 +1,6 @@
-import express, { type Request, Response, NextFunction } from "express";
+import express, { type Request, Response, NextFunction, type Express } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import { setupAuth } from "./replitAuth";
 
 const app = express();
 app.use(express.json());
@@ -37,18 +36,27 @@ app.use((req, res, next) => {
   next();
 });
 
-(async () => {
-  // Setup Replit authentication
-  await setupAuth(app);
-  
+// Initialize the app for both Vercel serverless and standalone server
+let initializedApp: express.Express | null = null;
+let httpServer: any = null;
+
+export async function createApp() {
+  if (initializedApp) {
+    return initializedApp;
+  }
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
-    res.status(status).json({ message });
-    throw err;
+    // Don't send response if headers already sent
+    if (!res.headersSent) {
+      res.status(status).json({ message });
+    }
+    // Log error but don't throw to prevent Vite error overlay
+    console.error('Error:', err);
   });
 
   // importantly only setup vite in development and after
@@ -60,16 +68,28 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
-  });
-})();
+  initializedApp = app;
+  httpServer = server;
+  return app;
+}
+
+// Export for Vercel serverless
+export default async function handler(req: Request, res: Response) {
+  const app = await createApp();
+  return app(req, res);
+}
+
+// Start server if not in Vercel environment
+if (!process.env.VERCEL) {
+  (async () => {
+    const app = await createApp();
+    const port = parseInt(process.env.PORT || '5000', 10);
+    httpServer!.listen({
+      port,
+      host: "0.0.0.0",
+      reusePort: true,
+    }, () => {
+      log(`serving on port ${port}`);
+    });
+  })();
+}

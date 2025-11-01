@@ -82,7 +82,7 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
   const [selectedRole, setSelectedRole] = useState<"freelancer" | "client" | null>(null);
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { signIn } = useAuth();
+  const { signIn, signUp, checkAuthStatus } = useAuth();
 
   // Reset form when tab changes
   useEffect(() => {
@@ -118,24 +118,81 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
     },
   });
 
-  const handleLogin = () => {
-    // Redirect to Replit OAuth instead of handling form submission
-    signIn();
-    onClose();
-  };
+  const loginMutation = useMutation({
+    mutationFn: async (data: LoginForm) => {
+      return await signIn(data.email, data.password);
+    },
+    onSuccess: (result) => {
+      if (result.success) {
+        toast({
+          title: "Success!",
+          description: "You've been logged in successfully.",
+        });
+        queryClient.invalidateQueries();
+        checkAuthStatus();
+        onClose();
+      } else {
+        toast({
+          title: "Login Failed",
+          description: result.error || "Please check your credentials and try again.",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Login Failed",
+        description: error.message || "An error occurred. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
-  const handleRegister = () => {
-    // Redirect to Replit OAuth for registration as well
-    signIn();
-    onClose();
-  };
+  const registerMutation = useMutation({
+    mutationFn: async (data: RegisterForm) => {
+      return await signUp({
+        email: data.email,
+        password: data.password,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        role: data.role,
+        bio: data.bio,
+        skills: data.skills,
+        hourlyRate: data.hourlyRate,
+      });
+    },
+    onSuccess: (result) => {
+      if (result.success) {
+        toast({
+          title: "Account Created!",
+          description: "Your account has been created successfully. Your profile is pending admin approval.",
+        });
+        queryClient.invalidateQueries();
+        checkAuthStatus();
+        onClose();
+      } else {
+        toast({
+          title: "Registration Failed",
+          description: result.error || "Please check your information and try again.",
+          variant: "destructive",
+        });
+      }
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Registration Failed",
+        description: error.message || "An error occurred. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
 
   const onLoginSubmit = (data: LoginForm) => {
-    handleLogin();
+    loginMutation.mutate(data);
   };
 
   const onRegisterSubmit = (data: RegisterForm) => {
-    handleRegister();
+    registerMutation.mutate(data);
   };
 
   return (
@@ -231,8 +288,9 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
                   type="submit"
                   className="w-full"
                   data-testid="button-login-submit"
+                  disabled={loginMutation.isPending}
                 >
-                  Sign In with Replit
+                  {loginMutation.isPending ? "Signing In..." : "Sign In"}
                 </Button>
               </form>
             </Form>
@@ -494,8 +552,9 @@ export default function AuthModal({ isOpen, onClose, defaultTab = "login" }: Aut
                   type="submit"
                   className="w-full"
                   data-testid="button-register-submit"
+                  disabled={registerMutation.isPending}
                 >
-                  Continue with Replit
+                  {registerMutation.isPending ? "Creating Account..." : "Create Account"}
                 </Button>
               </form>
             </Form>

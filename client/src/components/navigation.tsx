@@ -14,7 +14,7 @@ import AuthModal from "./auth-modal";
 
 
 export default function Navigation() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, signOut } = useAuth();
   const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [authModalOpen, setAuthModalOpen] = useState(false);
@@ -367,7 +367,10 @@ export default function Navigation() {
                   Welcome, {(user as any)?.firstName || (user as any)?.email}
                 </span>
                 <Button
-                  onClick={() => (window.location.href = "/api/logout")}
+                  onClick={async () => {
+                    await signOut();
+                    window.location.href = "/";
+                  }}
                   variant="outline"
                   className={`backdrop-blur-sm rounded-lg transition-all duration-200 ${
                     isDarkMode 
@@ -606,7 +609,10 @@ export default function Navigation() {
                           Welcome, {(user as any)?.firstName || (user as any)?.email}
                         </div>
                         <Button
-                          onClick={() => (window.location.href = "/api/logout")}
+                          onClick={async () => {
+                            await signOut();
+                            window.location.href = "/";
+                          }}
                           variant="outline"
                           className={`w-full ${
                             isDarkMode 

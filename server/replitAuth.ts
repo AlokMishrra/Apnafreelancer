@@ -8,7 +8,8 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 
-if (!process.env.REPLIT_DOMAINS) {
+// Make REPLIT_DOMAINS optional for local development
+if (!process.env.REPLIT_DOMAINS && process.env.NODE_ENV === 'production') {
   throw new Error("Environment variable REPLIT_DOMAINS not provided");
 }
 
@@ -61,6 +62,22 @@ async function upsertUser(
 }
 
 export async function setupAuth(app: Express) {
+  // Skip auth setup if REPLIT_DOMAINS is not set (local development)
+  if (!process.env.REPLIT_DOMAINS) {
+    app.set("trust proxy", 1);
+    app.use(getSession());
+    app.use(passport.initialize());
+    app.use(passport.session());
+    // Add dummy login/logout routes for local dev
+    app.get("/api/login", (req, res) => {
+      res.json({ message: "Authentication disabled in local development" });
+    });
+    app.get("/api/logout", (req, res) => {
+      res.json({ message: "Logout disabled in local development" });
+    });
+    return;
+  }
+
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
